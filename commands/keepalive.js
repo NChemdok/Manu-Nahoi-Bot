@@ -3,12 +3,17 @@ const keepalive = async (message) => {
 
   const messageText = "Zinda Ase, Itiya Wi";
 
+  function Sleep(milliseconds) {
+    return new Promise((resolve) => setTimeout(resolve, milliseconds));
+  }
+
   if (user.username === "Slowthy_Sloth") {
     while (true) {
-      await message.channel.send(messageText, { timeout: 200000 });
+      message.channel.send(messageText);
+      await Sleep(200000);
     }
   } else {
-    message.channel.send("You are not allowed to use this command");
+    await message.channel.send("You are not allowed to use this command");
   }
 };
 
