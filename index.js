@@ -7,10 +7,24 @@ const kimanmanu = require("./commands/kimanmanu");
 const kunase = require("./commands/kunase");
 const modot = require("./commands/modot");
 const kipare = require("./commands/kipare");
+const kobi = require("./commands/kobi");
+const kisa = require("./commands/kisa");
+const spampls = require("./commands/spampls");
+const hosaase = require("./commands/hosaase");
+const ropasi = require("./commands/ropasi");
+const hobo = require("./commands/hobo");
+const kiley = require("./commands/kiley");
+const kimanderi = require("./commands/kimanderi");
+const saap = require("./commands/saap");
+const sundor = require("./commands/sundor");
+const kiara = require("./commands/kiara");
+const homai = require("./commands/homai");
+const reply = require("./commands/reply");
+const generateRandomColor = require("./extras/generateRandomColor");
 
 const client = new Discord.Client();
-
-const imageOsa = "./images/oneman.jpg";
+const storyString = new Array();
+const playerQueue = new Array();
 
 client.login(process.env.BOT_TOKEN);
 const prefix = "*";
@@ -31,10 +45,6 @@ client.on("message", function (message) {
   //Specify commands here
   if (command === "ping") {
     ping(message);
-  } else if (command === "kobi") {
-    var textArray = ["hello", "there"];
-    var randomNumber = Math.floor(Math.random() * textArray.length);
-    message.reply(textArray[randomNumber]);
   } else if (command === "shakal") {
     shakal(message);
   } else if (command === "kikhaishe") {
@@ -44,28 +54,66 @@ client.on("message", function (message) {
   } else if (command === "kimanmanu") {
     kimanmanu(message);
   } else if (command === "kimanderi") {
-    message.channel.send("Olop Hoa Nai de Maaf :P");
+    kimanderi(message);
   } else if (command === "kunase") {
     kunase(message);
   } else if (command === "kipare") {
     kipare(message);
+  } else if (command === "kobi") {
+    kobi(message);
   } else if (command === "kiara") {
-    message.channel.send("What to do ho.. Najane");
+    kiara(message);
   } else if (command === "kuku") {
     message.channel.send("Etu wi What to do ho.. Najane");
   } else if (command === "kisa") {
-    ////
-  } else if (command === "lastmanu") {
-    const imageURL = "https://i.ibb.co/Fh1hZT6/lastmanu.jpg";
-
+    kisa(message, storyString);
+  } else if (command === "kisareset") {
+    storyString.splice(0, storyString.length);
+    message.channel.send("Kisa Hari Jai She");
+  } else if (command === "spampls") {
+    spampls(message);
+  } else if (command === "hosaase") {
+    hosaase(message);
+  } else if (command === "ropasi") {
+    ropasi(message);
+  } else if (command === "hobo?") {
+    hobo(message);
+  } else if (command === "kiley?") {
+    kiley(message);
+  } else if (command === "saap") {
+    saap(message, playerQueue);
+  } else if (command === "sundor") {
+    sundor(message);
+  } else if (command === "homai") {
+    homai(message);
+  } else if (command === "reply") {
+    //reply(message, playerQueue);
+  } else if (command === "avila") {
+    const imageUrl = "https://i.ibb.co/Wg9mngM/small-gu.jpg";
+    //https://i.ibb.co/DbDLxtC/small-cat.jpg"
+    const color = "#" + generateRandomColor();
     message.channel.send({
       embed: {
-        color: 3447003,
-        description: "For Limitted Time Only",
-        image: { url: imageURL },
+        color: color,
+        description: "Avilas' Smallest Guinea Pig",
+        image: { url: imageUrl },
+      },
+    });
+  } else if (command === "vivila") {
+    const imageUrl = "https://i.ibb.co/DbDLxtC/small-cat.jpg";
+    const color = "#" + generateRandomColor();
+    message.channel.send({
+      embed: {
+        color: color,
+        description: "Avilas' Cat",
+        image: { url: imageUrl },
       },
     });
   } else if (command === "modot") {
     modot(message);
+  } else {
+    message.channel.send(
+      "Etu tho Napare De... Modot lage koi le *modot type kuriwi"
+    );
   }
 });

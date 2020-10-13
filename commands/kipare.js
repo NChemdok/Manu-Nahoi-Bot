@@ -8,6 +8,9 @@ const kipare = (message) => {
     "2 min noodles 1 min te pakawo",
     "Nasai na exam te cheat kuriwo",
     "Matha te anda fry kuriwo",
+    "Chest te phool palibo",
+    "gahuri bhal pra palibo",
+    "pani boil kuriwole pare",
   ];
   var powerSize = Math.floor(Math.random() * powerArray.length);
   var randomPower = powerArray[powerSize];
