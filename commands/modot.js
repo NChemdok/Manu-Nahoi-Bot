@@ -21,6 +21,7 @@ const modot = (message) => {
     "*saap | Replica of Snakes and ladder game\n" +
     "*sundor <@user> | Grades you level of attraction\n" +
     "*homai <@user> | tells about sleep schedule\n" +
+    "*kikoishe <@user> | What did the mentioned person say?\n" +
     "More Coming Soon";
 
   const color = "#" + generateRandomColor();

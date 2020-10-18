@@ -20,6 +20,7 @@ const sundor = require("./commands/sundor");
 const kiara = require("./commands/kiara");
 const homai = require("./commands/homai");
 const keepalive = require("./commands/keepalive");
+const kikoishe = require("./commands/kikoishe");
 const reply = require("./commands/reply");
 const generateRandomColor = require("./extras/generateRandomColor");
 
@@ -87,8 +88,8 @@ client.on("message", function (message) {
     sundor(message);
   } else if (command === "homai") {
     homai(message);
-  } else if (command === "keepalive") {
-    keepalive(message);
+  } else if (command === "kikoishe") {
+    kikoishe(message);
   } else if (command === "reply") {
     //reply(message, playerQueue);
   } else if (command === "avila") {
