@@ -10,9 +10,10 @@ const kikoishe = (message) => {
     "love te 2nd hand 3rd hand nai, love is blind",
     "kun ke wi bhui nai, ahiwi single fight kuriwo",
     "bhaat nakha agae te haat dulawi",
-    "aji pra no modu, hoilewi modur ghor te discount mangi thaka dikshe",
+    "aji pra no modu, hoilewi modur ghor te discount mangi thaka dikhishe",
     "moi aji tu joldi gumawo....",
     "oi oi shikar olop dibina, pichete di wapas diwo",
+    "apuni kar ni moon wi ani diwo, just yes ekbar kowi",
   ];
   var lineSize = Math.floor(Math.random() * linesArray.length);
   var randomLine = linesArray[lineSize];

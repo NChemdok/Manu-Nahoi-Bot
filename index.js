@@ -21,6 +21,7 @@ const kiara = require("./commands/kiara");
 const homai = require("./commands/homai");
 const keepalive = require("./commands/keepalive");
 const kikoishe = require("./commands/kikoishe");
+const sloth = require("./commands/sloth");
 const reply = require("./commands/reply");
 const generateRandomColor = require("./extras/generateRandomColor");
 
@@ -90,6 +91,8 @@ client.on("message", function (message) {
     homai(message);
   } else if (command === "kikoishe") {
     kikoishe(message);
+  } else if (command === "sloth") {
+    sloth(message);
   } else if (command === "reply") {
     //reply(message, playerQueue);
   } else if (command === "avila") {
