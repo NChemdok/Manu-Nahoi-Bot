@@ -22,6 +22,8 @@ const modot = (message) => {
     "*sundor <@user> | Grades you level of attraction\n" +
     "*homai <@user> | tells about sleep schedule\n" +
     "*kikoishe <@user> | What did the mentioned person say?\n" +
+    "*xmas | Shows time left until Christmas\n" +
+    "*newyear | Shows time left until New Year\n" +
     "More Coming Soon";
 
   const color = "#" + generateRandomColor();

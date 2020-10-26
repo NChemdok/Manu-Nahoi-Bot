@@ -22,6 +22,8 @@ const homai = require("./commands/homai");
 const keepalive = require("./commands/keepalive");
 const kikoishe = require("./commands/kikoishe");
 const sloth = require("./commands/sloth");
+const xmas = require("./commands/xmas");
+const newyear = require("./commands/newyear");
 const reply = require("./commands/reply");
 const generateRandomColor = require("./extras/generateRandomColor");
 
@@ -93,6 +95,10 @@ client.on("message", function (message) {
     kikoishe(message);
   } else if (command === "sloth") {
     sloth(message);
+  } else if (command === "xmas") {
+    xmas(message);
+  } else if (command === "newyear") {
+    newyear(message);
   } else if (command === "reply") {
     //reply(message, playerQueue);
   } else if (command === "avila") {
