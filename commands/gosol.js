@@ -7,7 +7,7 @@ const gosol = (message) => {
     "Dos Saal",
     "Ek Haafta",
     "Ek Muina",
-    "Nukura",
+    "Bishi Din",
     "Teen Din",
     "Hazar Saal",
   ];

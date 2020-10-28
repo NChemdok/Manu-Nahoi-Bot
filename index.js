@@ -22,6 +22,7 @@ const homai = require("./commands/homai");
 const keepalive = require("./commands/keepalive");
 const kikoishe = require("./commands/kikoishe");
 const sloth = require("./commands/sloth");
+const mutameow = require("./commands/mutameow");
 const xmas = require("./commands/xmas");
 const newyear = require("./commands/newyear");
 const reply = require("./commands/reply");
@@ -99,6 +100,8 @@ client.on("message", function (message) {
     xmas(message);
   } else if (command === "newyear") {
     newyear(message);
+  } else if (command === "mutameow") {
+    mutameow(message);
   } else if (command === "reply") {
     //reply(message, playerQueue);
   } else if (command === "avila") {
