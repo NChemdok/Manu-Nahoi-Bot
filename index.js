@@ -37,6 +37,17 @@ const prefix = "*";
 
 client.on("message", function (message) {
   if (message.author.bot) return;
+  if (message.mentions.members.first() !== undefined) {
+    if (message.mentions.members.first().id === "761892006263390210") {
+      message.reply("Moi la Prefix * ase");
+    }
+  }
+  if (message.content.includes("chup") || message.content.includes("Chup")) {
+    message.reply(" Tui hi Chup");
+  }
+  if (message.content.includes("oi") || message.content.includes("Oi")) {
+    message.reply(" Kile hudai Oi Oi");
+  }
   if (!message.content.startsWith(prefix)) return;
 
   //Removes the Prefix
