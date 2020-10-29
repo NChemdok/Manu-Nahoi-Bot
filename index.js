@@ -19,13 +19,12 @@ const saap = require("./commands/saap");
 const sundor = require("./commands/sundor");
 const kiara = require("./commands/kiara");
 const homai = require("./commands/homai");
-const keepalive = require("./commands/keepalive");
 const kikoishe = require("./commands/kikoishe");
 const sloth = require("./commands/sloth");
 const mutameow = require("./commands/mutameow");
 const xmas = require("./commands/xmas");
 const newyear = require("./commands/newyear");
-const reply = require("./commands/reply");
+const kuku = require("./commands/kuku");
 const generateRandomColor = require("./extras/generateRandomColor");
 
 const client = new Discord.Client();
@@ -57,87 +56,95 @@ client.on("message", function (message) {
   const command = args.shift().toLowerCase();
 
   //Specify commands here
-  if (command === "ping") {
-    ping(message);
-  } else if (command === "shakal") {
-    shakal(message);
-  } else if (command === "kikhaishe") {
-    kikhaishe(message);
-  } else if (command === "gosol") {
-    gosol(message);
-  } else if (command === "kimanmanu") {
-    kimanmanu(message);
-  } else if (command === "kimanderi") {
-    kimanderi(message);
-  } else if (command === "kunase") {
-    kunase(message);
-  } else if (command === "kipare") {
-    kipare(message);
-  } else if (command === "kobi") {
-    kobi(message);
-  } else if (command === "kiara") {
-    kiara(message);
-  } else if (command === "kuku") {
-    message.channel.send("Etu wi What to do ho.. Najane");
-  } else if (command === "kisa") {
-    kisa(message, storyString);
-  } else if (command === "kisareset") {
-    storyString.splice(0, storyString.length);
-    message.channel.send("Kisa Hari Jai She");
-  } else if (command === "spampls") {
-    spampls(message);
-  } else if (command === "hosaase") {
-    hosaase(message);
-  } else if (command === "ropasi") {
-    ropasi(message);
-  } else if (command === "hobo?") {
-    hobo(message);
-  } else if (command === "kiley?") {
-    kiley(message);
-  } else if (command === "saap") {
-    saap(message, playerQueue);
-  } else if (command === "sundor") {
-    sundor(message);
-  } else if (command === "homai") {
-    homai(message);
-  } else if (command === "kikoishe") {
-    kikoishe(message);
-  } else if (command === "sloth") {
-    sloth(message);
-  } else if (command === "xmas") {
-    xmas(message);
-  } else if (command === "newyear") {
-    newyear(message);
-  } else if (command === "mutameow") {
-    mutameow(message);
-  } else if (command === "reply") {
-    //reply(message, playerQueue);
-  } else if (command === "avila") {
-    const imageUrl = "https://i.ibb.co/Wg9mngM/small-gu.jpg";
-    //https://i.ibb.co/DbDLxtC/small-cat.jpg"
-    const color = "#" + generateRandomColor();
-    message.channel.send({
-      embed: {
-        color: color,
-        description: "Avilas' Smallest Guinea Pig",
-        image: { url: imageUrl },
-      },
-    });
-  } else if (command === "vivila") {
-    const imageUrl = "https://i.ibb.co/DbDLxtC/small-cat.jpg";
-    const color = "#" + generateRandomColor();
-    message.channel.send({
-      embed: {
-        color: color,
-        description: "Avilas' Cat",
-        image: { url: imageUrl },
-      },
-    });
-  } else if (command === "modot") {
-    modot(message);
-  } else {
-    message.channel.send(
-      "Etu tho Napare De... Modot lage koi le *modot type kuriwi"
-    );
+  switch (command) {
+    case "ping":
+      ping(message);
+      break;
+    case "shakal":
+      shakal(message);
+      break;
+    case "kikhaishe":
+      kikhaishe(message);
+      break;
+    case "gosol":
+      gosol(message);
+      break;
+    case "kimanmanu":
+      kimanmanu(message);
+      break;
+    case "kimanderi":
+      kimanderi(message);
+      break;
+    case "kunase":
+      kunase(message);
+      break;
+    case "kikhaishe":
+      kikhaishe(message);
+      break;
+    case "kipare":
+      kipare(message);
+      break;
+    case "kobi":
+      kobi(message);
+      break;
+    case "kiara":
+      kiara(message);
+      break;
+    case "kuku":
+      kuku(message);
+      break;
+    case "kisa":
+      kisa(message, storyString);
+      break;
+    case "kisareset":
+      storyString.splice(0, storyString.length);
+      message.channel.send("Kisa Hari Jai She");
+      break;
+    case "spampls":
+      spampls(message);
+      break;
+    case "hosaase":
+      hosaase(message);
+      break;
+    case "ropasi":
+      ropasi(message);
+      break;
+    case "hobo?":
+      hobo(message);
+      break;
+    case "kiley?":
+      kiley(message);
+      break;
+    case "saap":
+      saap(message, playerQueue);
+      break;
+    case "sundor":
+      sundor(message);
+      break;
+    case "homai":
+      homai(message);
+      break;
+    case "kikoishe":
+      kikoishe(message);
+      break;
+    case "sloth":
+      sloth(message);
+      break;
+    case "xmas":
+      xmas(message);
+      break;
+    case "newyear":
+      newyear(message);
+      break;
+    case "mutameow":
+      mutameow(message);
+      break;
+    case "modot":
+      modot(message);
+      break;
+    default:
+      message.channel.send(
+        "Etu tho Napare De... Modot lage koi le *modot type kuriwi"
+      );
   }
 });
