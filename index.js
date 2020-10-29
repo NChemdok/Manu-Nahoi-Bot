@@ -45,9 +45,6 @@ client.on("message", function (message) {
   if (message.content.includes("chup") || message.content.includes("Chup")) {
     message.reply(" Tui hi Chup");
   }
-  if (message.content.includes("oi") || message.content.includes("Oi")) {
-    message.reply(" Kile hudai Oi Oi");
-  }
   if (!message.content.startsWith(prefix)) return;
 
   //Removes the Prefix
