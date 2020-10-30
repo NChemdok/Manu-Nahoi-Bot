@@ -24,7 +24,7 @@ const modot = (message) => {
     "*kikoishe <@user> | What did the mentioned person say?\n" +
     "*xmas | Shows time left until Christmas\n" +
     "*newyear | Shows time left until New Year\n" +
-    "*mutameow | Fecthes random male neko image\n" +
+    "*mutameow | Fetches random male neko image\n" +
     "More Coming Soon";
 
   const color = "#" + generateRandomColor();
