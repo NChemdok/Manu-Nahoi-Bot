@@ -14,7 +14,12 @@ const xmas = (message) => {
 
   const xmas = new Date("December 25, 2020");
   const msPerDay = 24 * 60 * 60 * 1000;
-  const timeLeft = xmas.getTime() - today.getTime();
+  var currentOffset = today.getTimezoneOffset();
+
+  var ISTOffset = 330; // IST offset UTC +5:30
+
+  var ISTTime = new Date(today.getTime() + (ISTOffset + currentOffset) * 60000);
+  const timeLeft = xmas.getTime() - ISTTime;
 
   //document.write("<p>" + timeLeft + "</p>");
 

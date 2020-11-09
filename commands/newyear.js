@@ -14,10 +14,14 @@ const newyear = (message) => {
   const today = new Date();
 
   const xmas = new Date("January 1, 2021");
-  const msPerDay = 24 * 60 * 60 * 1000;
-  const timeLeft = xmas.getTime() - today.getTime();
 
-  //document.write("<p>" + timeLeft + "</p>");
+  const msPerDay = 24 * 60 * 60 * 1000;
+  var currentOffset = today.getTimezoneOffset();
+
+  var ISTOffset = 330; // IST offset UTC +5:30
+
+  var ISTTime = new Date(today.getTime() + (ISTOffset + currentOffset) * 60000);
+  const timeLeft = xmas.getTime() - ISTTime;
 
   const e_daysLeft = timeLeft / msPerDay;
   const daysLeft = Math.floor(e_daysLeft);
