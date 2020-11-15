@@ -25,6 +25,7 @@ const modot = (message) => {
     "*xmas | Shows time left until Christmas\n" +
     "*newyear | Shows time left until New Year\n" +
     "*mutameow | Fetches random male neko image\n" +
+    "*joke | Shows a random joke\n" +
     "More Coming Soon";
 
   const color = "#" + generateRandomColor();

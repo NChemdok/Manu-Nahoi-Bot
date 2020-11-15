@@ -25,6 +25,7 @@ const mutameow = require("./commands/mutameow");
 const xmas = require("./commands/xmas");
 const newyear = require("./commands/newyear");
 const kuku = require("./commands/kuku");
+const joke = require("./commands/joke");
 const generateRandomColor = require("./extras/generateRandomColor");
 
 const client = new Discord.Client();
@@ -141,6 +142,9 @@ client.on("message", function (message) {
       break;
     case "modot":
       modot(message);
+      break;
+    case "joke":
+      joke(message);
       break;
     default:
       message.channel.send(
