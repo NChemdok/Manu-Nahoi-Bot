@@ -4,6 +4,7 @@ var myjoke = require("make-me-laugh");
 
 const joke = (message) => {
   var joke = myjoke.getjoke();
+  const user = message.mentions.users.first() || message.author;
 
   const color = "#" + generateRandomColor();
   const finalResponse = new Discord.MessageEmbed()
