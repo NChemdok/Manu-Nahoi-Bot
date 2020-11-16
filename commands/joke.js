@@ -8,6 +8,7 @@ const joke = (message) => {
   const color = "#" + generateRandomColor();
   const finalResponse = new Discord.MessageEmbed()
     .setColor(color)
+    .setTitle("Here's A Joke For You " + user.username)
     .setDescription(joke);
   message.channel.send(finalResponse);
 };
