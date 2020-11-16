@@ -3,8 +3,7 @@ const Discord = require("discord.js");
 const generateRandomColor = require("../extras/generateRandomColor");
 
 const joke = async (message) => {
-  const url =
-    "https://sv443.net/jokeapi/v2/joke/Miscellaneous,Dark,Pun,Spooky?format=txt&type=single";
+  const url = "https://sv443.net/jokeapi/v2/joke/Any?format=txt";
   async function getData(url) {
     const response = await fetch(url);
 
