@@ -26,7 +26,6 @@ const xmas = require("./commands/xmas");
 const newyear = require("./commands/newyear");
 const kuku = require("./commands/kuku");
 const joke = require("./commands/joke");
-const generateRandomColor = require("./extras/generateRandomColor");
 
 const client = new Discord.Client();
 const storyString = new Array();

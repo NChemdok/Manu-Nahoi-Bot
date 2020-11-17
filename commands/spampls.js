@@ -1,12 +1,12 @@
 const spampls = (message) => {
-  var characters =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-  var charactersLength = characters.length;
-  for (var i = 0; i < 40; i++) {
+  let messageText = message.content.slice(8).trim();
+  const times = parseInt(messageText);
+  console.log(messageText);
+  for (var i = times; i >= 0; i--) {
     // message.channel.send(
     //   characters.charAt(Math.floor(Math.random() * charactersLength))
     // );
-    message.channel.send("Moving On ...");
+    message.channel.send("Spam Ends in " + i);
   }
 };
 
