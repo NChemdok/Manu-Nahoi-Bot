@@ -7,9 +7,7 @@ const modot = (message) => {
     "*shakal <@User> | To Show Profile Picture \n" +
     "*ping | To test if Bot Server Active \n" +
     "*gosol <@user> | To see if took Bath \n" +
-    "*kimanmanu | Shows No of people Online \n" +
     "*kimanderi <@user> <@user> | Tells how long the two will last if a couple \n" +
-    "*kunase <@user> | Randomly Selects a Person and shows how they are related \n" +
     "*kipare <@user> | Tells what super power tagged user has \n" +
     "*kobi <Custom Text> | Make the bot say something \n" +
     "*hosaase <@user> | Generates a Random Approved Meme \n" +

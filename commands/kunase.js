@@ -26,6 +26,7 @@ const kunase = (message) => {
   ];
 
   message.guild.members.fetch().then((fetchedMembers) => {
+    console.log(fetchedMembers);
     const totalOnline = fetchedMembers.filter(
       (member) => !member.user.bot && member.presence.status === "online"
     );
@@ -38,6 +39,7 @@ const kunase = (message) => {
     while (randomUser === user.username) {
       var randomUser = userNames[randomNumber];
     }
+    console.log(randomUser);
     var relationResponse = relationsArray[relationSize];
     var commandResponse =
       user.username +

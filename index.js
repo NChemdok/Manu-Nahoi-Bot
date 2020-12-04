@@ -3,8 +3,8 @@ const ping = require("./commands/ping");
 const shakal = require("./commands/shakal");
 const kikhaishe = require("./commands/kikhaishe");
 const gosol = require("./commands/gosol");
-const kimanmanu = require("./commands/kimanmanu");
-const kunase = require("./commands/kunase");
+// const kimanmanu = require("./commands/kimanmanu");
+// const kunase = require("./commands/kunase");
 const modot = require("./commands/modot");
 const kipare = require("./commands/kipare");
 const kobi = require("./commands/kobi");
@@ -30,9 +30,20 @@ const joke = require("./commands/joke");
 const client = new Discord.Client();
 const storyString = new Array();
 const playerQueue = new Array();
+const queue = new Map();
 
 client.login(process.env.BOT_TOKEN);
 const prefix = "*";
+
+client.once("ready", () => {
+  console.log("Ready!");
+});
+client.once("reconnecting", () => {
+  console.log("Reconnecting!");
+});
+client.once("disconnect", () => {
+  console.log("Disconnect!");
+});
 
 client.on("message", function (message) {
   if (message.author.bot) return;
@@ -55,6 +66,9 @@ client.on("message", function (message) {
   //Converts cmds to lowercase
   const command = args.shift().toLowerCase();
 
+  //Queue for Music
+  const serverQueue = queue.get(message.guild.id);
+
   //Specify commands here
   switch (command) {
     case "ping":
@@ -69,15 +83,15 @@ client.on("message", function (message) {
     case "gosol":
       gosol(message);
       break;
-    case "kimanmanu":
-      kimanmanu(message);
-      break;
+    // case "kimanmanu":
+    //   kimanmanu(message);
+    //   break;
     case "kimanderi":
       kimanderi(message);
       break;
-    case "kunase":
-      kunase(message);
-      break;
+    // case "kunase":
+    //   kunase(message);
+    //   break;
     case "kikhaishe":
       kikhaishe(message);
       break;
