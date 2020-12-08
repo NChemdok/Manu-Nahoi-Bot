@@ -26,11 +26,11 @@ const xmas = require("./commands/xmas");
 const newyear = require("./commands/newyear");
 const kuku = require("./commands/kuku");
 const joke = require("./commands/joke");
+const mplay = require("./commands/mplay");
 
 const client = new Discord.Client();
 const storyString = new Array();
 const playerQueue = new Array();
-const queue = new Map();
 
 client.login(process.env.BOT_TOKEN);
 const prefix = "*";
@@ -64,10 +64,7 @@ client.on("message", function (message) {
   const args = commandBody.split(" ");
 
   //Converts cmds to lowercase
-  const command = args.shift().toLowerCase();
-
-  //Queue for Music
-  const serverQueue = queue.get(message.guild.id);
+  const command = args[0].toString().toLowerCase();
 
   //Specify commands here
   switch (command) {
@@ -158,6 +155,9 @@ client.on("message", function (message) {
       break;
     case "joke":
       joke(message);
+      break;
+    case "play":
+      mplay(args, message);
       break;
     default:
       message.channel.send(
