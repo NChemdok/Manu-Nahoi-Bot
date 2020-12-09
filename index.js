@@ -156,9 +156,10 @@ client.on("message", function (message) {
     case "joke":
       joke(message);
       break;
-    case "play":
+    case "p":
     case "skip":
     case "stop":
+    case "q":
       mplay(args, message, command);
       break;
     default:

@@ -6,11 +6,12 @@ const stop = (args, message, servers) => {
     }
 
     server.dispatcher.end();
-    message.channel.send("Playback Ending");
+    message.channel.send("Leaving");
     console.log("stopped the queue");
   }
 
   if (message.guild.connection) message.guild.voice.connection.disconnect();
+  playerPlaying = false;
 };
 
 module.exports = stop;
