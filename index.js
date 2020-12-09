@@ -157,7 +157,9 @@ client.on("message", function (message) {
       joke(message);
       break;
     case "play":
-      mplay(args, message);
+    case "skip":
+    case "stop":
+      mplay(args, message, command);
       break;
     default:
       message.channel.send(

@@ -1,54 +1,23 @@
-const ytdl = require("ytdl-core");
+const play = require("./music/play");
+const skip = require("./music/skip");
+const stop = require("./music/stop");
 
 var servers = {};
 
-const mplay = (args, message) => {
-  if (!args[1]) {
-    var songLink = "";
-  } else {
-    var songLink = args[1].toString();
+const mplay = (args, message, command) => {
+  switch (command) {
+    case "play":
+      play(args, message, servers);
+      break;
+    case "skip":
+      skip(args, message, servers);
+      break;
+    case "stop":
+      stop(args, message, servers);
+      break;
+    default:
+      message.channel.send("This command is not supported");
   }
-
-  function play(connection, message) {
-    var server = servers[message.guild.id];
-
-    server.dispatcher = connection.play(
-      ytdl(server.queue[0], { filter: "audioonly" })
-    );
-    server.queue.shift();
-
-    server.dispatcher.on("end", function () {
-      if (server.queue[0]) {
-        play(connection, message);
-      } else {
-        connecton.disconnect();
-      }
-    });
-  }
-
-  if (!songLink) {
-    message.channel.send("Please Provide Song link");
-    return;
-  }
-
-  if (!message.member.voice.channel) {
-    message.channel.send("You must be in a voice channel");
-    return;
-  }
-
-  if (!servers[message.guild.id])
-    servers[message.guild.id] = {
-      queue: [],
-    };
-
-  var server = servers[message.guild.id];
-
-  server.queue.push(songLink);
-
-  if (!message.guild.voiceConnection)
-    message.member.voice.channel.join().then(function (connection) {
-      play(connection, message);
-    });
 };
 
 module.exports = mplay;
