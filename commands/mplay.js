@@ -8,8 +8,10 @@ var servers = {};
 const mplay = (args, message, command) => {
   switch (command) {
     case "p":
-    case "stop":
       play(args, message, servers, command);
+      break;
+    case "stop":
+      stop(args, message, servers);
       break;
     case "skip":
       skip(args, message, servers);

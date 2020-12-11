@@ -4,14 +4,12 @@ const stop = (args, message, servers) => {
     for (var i = server.queue.length - 1; i >= 0; i--) {
       server.queue.splice(i, 1);
     }
-
     server.dispatcher.end();
     message.channel.send("Leaving");
     console.log("stopped the queue");
   }
 
   if (message.guild.connection) message.guild.voice.connection.disconnect();
-  playerPlaying = false;
 };
 
 module.exports = stop;
