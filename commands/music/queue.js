@@ -1,29 +1,47 @@
-const ytdl = require("ytdl-core");
+const Discord = require("discord.js");
+const generateRandomColor = require("../../extras/generateRandomColor");
 
-const queue = async (args, message, servers) => {
+const queue = async (message, serverQueue) => {
   var currentSongQueue = [];
 
-  async function getSongsQueueInfo(server) {
-    message.channel.send("Current Songs in Queue : ");
-    if (Array.isArray(server.queue) && server.queue.length) {
-      for (var i = 0; i <= server.queue.length - 1; i++) {
-        var songLink = server.queue[i];
-        var getinfo = await ytdl.getBasicInfo(songLink);
-        var songTitle = getinfo.videoDetails.title;
-        currentSongQueue.push(songTitle);
-      }
-      message.channel.send(currentSongQueue);
-    } else {
-      message.channel.send("Queue Empty to add songs type *p <song link>");
-    }
+  function secondsToTime(songDurationInSeconds) {
+    var hr = Math.floor(songDurationInSeconds / 3600)
+        .toString()
+        .padStart(2, "0"),
+      min = Math.floor((songDurationInSeconds % 3600) / 60)
+        .toString()
+        .padStart(2, "0"),
+      sec = Math.floor(songDurationInSeconds % 60)
+        .toString()
+        .padStart(2, "0");
+
+    return hr + " hr : " + min + " min : " + sec + " sec";
   }
 
-  var server = servers[message.guild.id];
-  if (server !== undefined) {
-    getSongsQueueInfo(server);
-  } else {
-    message.channel.send("Bot is Currently not playing");
+  async function getSongsQueueInfo(serverQueue) {
+    if (serverQueue && serverQueue.songs.length) {
+      for (var i = 0; i <= serverQueue.songs.length - 1; i++) {
+        var songTitle = serverQueue.songs[i].title;
+        var songDurationInSeconds = serverQueue.songs[i].duration;
+        var formatedDuration = secondsToTime(songDurationInSeconds);
+        currentSongQueue.push(
+          `[${i + 1}] ${songTitle} | Duration : (${formatedDuration}) `
+        );
+      }
+      const color = "#" + generateRandomColor();
+      const finalResponse = new Discord.MessageEmbed()
+        .setColor(color)
+        .setTitle("Songs in Queue")
+        .setDescription(currentSongQueue);
+      message.channel.send(finalResponse);
+    } else {
+      message.channel.send("Queue Empty! To add songs type *p <song link>");
+    }
   }
+  if (!serverQueue) {
+    return message.channel.send("Bot is Currently not playing");
+  }
+  getSongsQueueInfo(serverQueue);
 };
 
 module.exports = queue;

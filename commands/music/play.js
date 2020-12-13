@@ -1,80 +1,83 @@
 const ytdl = require("ytdl-core");
+const q = require("./queue");
 
-var playerPlaying = false;
-
-const play = async (args, message, servers, command) => {
+const play = async (args, message, serverQueue, queue) => {
   if (!args[1]) {
     var songLink = "";
   } else {
     var songLink = args[1].toString();
   }
 
-  async function getVideoInfo(songLink) {
-    var getinfo = await ytdl.getBasicInfo(songLink);
-    var songTitle = getinfo.videoDetails.title;
+  const voiceChannel = message.member.voice.channel;
 
-    message.channel.send(songTitle + " Added to queue");
-    currentSongTitle = songTitle;
-    return;
-  }
-
-  async function displayCurrentSongPlaying() {
-    var getinfo = await ytdl.getBasicInfo(server.queue[0]);
-    var songTitle = getinfo.videoDetails.title;
-
-    message.channel.send("Currently Playing" + songTitle);
-    return;
-  }
-
-  async function play(connection, message) {
-    var server = servers[message.guild.id];
-
-    if (playerPlaying === false) {
-      server.dispatcher = connection.play(
-        ytdl(server.queue[0], { filter: "audioonly" })
-      );
-      playerPlaying = true;
-      displayCurrentSongPlaying();
-
-      server.dispatcher.on("finish", function () {
-        server.queue.shift();
-        if (server.queue[0]) {
-          playerPlaying = false;
-          play(connection, message);
-        } else {
-          playerPlaying = false;
-          connection.disconnect();
-        }
-      });
+  async function play(guild, song) {
+    const serverQueue = queue.get(message.guild.id);
+    if (!song) {
+      serverQueue.voiceChannel.leave();
+      queue.delete(guild.id);
+      message.channel.send("No more Songs in Queue, Leaving Voice Channel");
+      return;
     }
+
+    const dispatcher = serverQueue.connection.play(ytdl(song.url));
+    dispatcher
+      .on("finish", function () {
+        serverQueue.songs.shift();
+        play(guild, serverQueue.songs[0]);
+      })
+      .on("error", (error) => {
+        console.error(error);
+      });
+    dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
+    serverQueue.textChannel.send(`Now playing: ${song.title}`);
   }
 
-  if (!songLink) {
-    message.channel.send("Song link Required");
-    return;
+  if (!voiceChannel) {
+    return message.channel.send("You need to be in a voice channel");
   }
 
-  if (!message.member.voice.channel) {
-    message.channel.send("Please Join A Voice Channel");
-    return;
+  const permissions = voiceChannel.permissionsFor(message.client.user);
+  if (!permissions.has("CONNECT") || !permissions.has("SPEAK")) {
+    return message.channel.send(
+      "I need permissions to join and speak in the voice channel"
+    );
   }
 
-  if (!servers[message.guild.id])
-    servers[message.guild.id] = {
-      queue: [],
+  const songInfo = await ytdl.getBasicInfo(songLink);
+  console.log(songInfo.videoDetails.video_url);
+  const song = {
+    title: songInfo.videoDetails.title,
+    url: songInfo.videoDetails.video_url,
+    duration: songInfo.videoDetails.lengthSeconds,
+  };
+
+  if (!serverQueue) {
+    const queueConstruct = {
+      textChannel: message.channel,
+      voiceChannel: voiceChannel,
+      connection: null,
+      songs: [],
+      volume: 5,
+      playing: true,
     };
 
-  var server = servers[message.guild.id];
+    queue.set(message.guild.id, queueConstruct);
 
-  server.queue.push(songLink);
-  if (!message.channel.voiceConnection) {
-    const connection = await message.member.voice.channel.join();
-    play(connection, message);
+    queueConstruct.songs.push(song);
+
+    try {
+      var connection = await voiceChannel.join();
+      queueConstruct.connection = connection;
+      play(message.guild, queueConstruct.songs[0]);
+    } catch (err) {
+      console.log(err);
+      queue.delete(message.guild.id);
+      return message.channel.send(err);
+    }
+  } else {
+    serverQueue.songs.push(song);
+    return message.channel.send(`${song.title} has been added to queue!`);
   }
-
-  getVideoInfo(songLink);
-
-  console.log(server.queue);
 };
 
 module.exports = play;

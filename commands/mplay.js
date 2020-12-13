@@ -1,23 +1,24 @@
 const play = require("./music/play");
 const skip = require("./music/skip");
 const stop = require("./music/stop");
-const queue = require("./music/queue");
+const q = require("./music/queue");
 
-var servers = {};
+const queue = new Map();
 
 const mplay = (args, message, command) => {
+  const serverQueue = queue.get(message.guild.id);
   switch (command) {
     case "p":
-      play(args, message, servers, command);
+      play(args, message, serverQueue, queue);
       break;
     case "stop":
-      stop(args, message, servers);
+      stop(message, serverQueue);
       break;
     case "skip":
-      skip(args, message, servers);
+      skip(message, serverQueue);
       break;
     case "q":
-      queue(args, message, servers);
+      q(message, serverQueue);
       break;
     default:
       message.channel.send("This command is not supported");
