@@ -54,7 +54,13 @@ const play = async (args, message, serverQueue, queue) => {
       .setTitle(`Now playing : 🎧`)
       .setThumbnail("https://s8.gifyu.com/images/logoc770e3d062e8bb72.gif")
       .addFields({ name: song.title, value: secondsToTime(song.duration) });
-    serverQueue.textChannel.send(resultResponse);
+    await serverQueue.textChannel
+      .send(resultResponse)
+      .then((msg) => {
+        msg.delete({ timeout: song.duration * 1000 });
+        serverQueue.currentMusicPlayingMessageId = msg.id;
+      })
+      .catch(console.error);
   }
 
   if (!voiceChannel) {
@@ -86,6 +92,7 @@ const play = async (args, message, serverQueue, queue) => {
       connection: null,
       songs: [],
       volume: 5,
+      currentMusicPlayingMessageId: null,
       playing: true,
     };
 
