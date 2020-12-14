@@ -15,7 +15,11 @@ const queue = async (message, serverQueue) => {
         .toString()
         .padStart(2, "0");
 
-    return hr + " hr : " + min + " min : " + sec + " sec";
+    if (Math.floor(songDurationInSeconds / 3600) < 1) {
+      return min + " min : " + sec + " sec";
+    } else {
+      return hr + " hr : " + min + " min : " + sec + " sec";
+    }
   }
 
   async function getSongsQueueInfo(serverQueue) {
@@ -24,15 +28,22 @@ const queue = async (message, serverQueue) => {
         var songTitle = serverQueue.songs[i].title;
         var songDurationInSeconds = serverQueue.songs[i].duration;
         var formatedDuration = secondsToTime(songDurationInSeconds);
-        currentSongQueue.push(
-          `[${i + 1}] ${songTitle} | Duration : (${formatedDuration}) `
-        );
+        var songNumber = i + 1;
+        var songInfoColored =
+          "[" +
+          songNumber +
+          '] "' +
+          songTitle.substring(0, 20) +
+          "...  | Duration : " +
+          formatedDuration +
+          '"';
+        currentSongQueue.push(songInfoColored);
       }
       const color = "#" + generateRandomColor();
       const finalResponse = new Discord.MessageEmbed()
         .setColor(color)
         .setTitle("Songs in Queue")
-        .setDescription(currentSongQueue);
+        .setDescription("```css\n" + currentSongQueue + "\n```");
       message.channel.send(finalResponse);
     } else {
       message.channel.send("Queue Empty! To add songs type *p <song link>");

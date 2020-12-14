@@ -9,6 +9,7 @@ const stop = (message, serverQueue) => {
   }
   serverQueue.songs = [];
   serverQueue.connection.dispatcher.end();
+  return message.channel.send("Leaving Voice Channel");
 };
 
 module.exports = stop;

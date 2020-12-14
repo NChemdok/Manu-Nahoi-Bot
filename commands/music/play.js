@@ -1,13 +1,13 @@
 const ytdl = require("ytdl-core");
-const q = require("./queue");
+const Discord = require("discord.js");
+const generateRandomColor = require("../../extras/generateRandomColor");
 
 const play = async (args, message, serverQueue, queue) => {
   if (!args[1]) {
-    var songLink = "";
+    return message.channel.send("Please Provide Song Link");
   } else {
     var songLink = args[1].toString();
   }
-
   const voiceChannel = message.member.voice.channel;
 
   async function play(guild, song) {
@@ -29,7 +29,32 @@ const play = async (args, message, serverQueue, queue) => {
         console.error(error);
       });
     dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
-    serverQueue.textChannel.send(`Now playing: ${song.title}`);
+
+    function secondsToTime(songDurationInSeconds) {
+      var hr = Math.floor(songDurationInSeconds / 3600)
+          .toString()
+          .padStart(2, "0"),
+        min = Math.floor((songDurationInSeconds % 3600) / 60)
+          .toString()
+          .padStart(2, "0"),
+        sec = Math.floor(songDurationInSeconds % 60)
+          .toString()
+          .padStart(2, "0");
+
+      if (Math.floor(songDurationInSeconds / 3600) < 1) {
+        return min + " min : " + sec + " sec";
+      } else {
+        return hr + " hr : " + min + " min : " + sec + " sec";
+      }
+    }
+
+    const color = "#" + generateRandomColor();
+    const resultResponse = new Discord.MessageEmbed()
+      .setColor(color)
+      .setTitle(`Now playing : 🎧`)
+      .setThumbnail("https://s8.gifyu.com/images/logoc770e3d062e8bb72.gif")
+      .addFields({ name: song.title, value: secondsToTime(song.duration) });
+    serverQueue.textChannel.send(resultResponse);
   }
 
   if (!voiceChannel) {
@@ -43,6 +68,9 @@ const play = async (args, message, serverQueue, queue) => {
     );
   }
 
+  if (!ytdl.validateURL(songLink)) {
+    return message.channel.send("Invalid Link | No Song Found");
+  }
   const songInfo = await ytdl.getBasicInfo(songLink);
   console.log(songInfo.videoDetails.video_url);
   const song = {
