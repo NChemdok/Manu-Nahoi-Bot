@@ -24,13 +24,14 @@ const modot = (message) => {
     "*newyear | Shows time left until New Year\n" +
     "*mutameow | Fetches random male neko image\n" +
     "*joke | Shows a random joke\n" +
+    "*helpmusic | Shows All Supported Music Commands\n" +
     "More Coming Soon";
 
   const color = "#" + generateRandomColor();
   const commandList = new Discord.MessageEmbed()
     .setColor(color)
     .setTitle("List of Commands")
-    .setThumbnail("https://i.ibb.co/nQh9t25/images.png")
+    .setThumbnail("https://i.ibb.co/JrYB9pG/Manu-Nahoi-Logo.png")
     .setDescription(commands);
   //   message.channel.send("```" + commands + "```");
   message.channel.send(commandList);

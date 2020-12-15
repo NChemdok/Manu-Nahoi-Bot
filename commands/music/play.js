@@ -10,6 +10,8 @@ const play = async (args, message, serverQueue, queue) => {
   }
   const voiceChannel = message.member.voice.channel;
 
+  const Messages = await message.channel.messages.fetch({ limit: 100 });
+
   async function play(guild, song) {
     const serverQueue = queue.get(message.guild.id);
     if (!song) {
@@ -57,8 +59,11 @@ const play = async (args, message, serverQueue, queue) => {
     await serverQueue.textChannel
       .send(resultResponse)
       .then((msg) => {
-        msg.delete({ timeout: song.duration * 1000 });
         serverQueue.currentMusicPlayingMessageId = msg.id;
+        Messages.forEach((msg) => {
+          if (msg.id === serverQueue.currentMusicPlayingMessageId)
+            msg.delete({ timeout: song.duration * 1000 });
+        });
       })
       .catch(console.error);
   }

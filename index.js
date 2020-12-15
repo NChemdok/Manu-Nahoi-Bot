@@ -27,6 +27,7 @@ const newyear = require("./commands/newyear");
 const kuku = require("./commands/kuku");
 const joke = require("./commands/joke");
 const mplay = require("./commands/mplay");
+const helpMusic = require("./commands/music/musicCommands");
 
 const client = new Discord.Client();
 const storyString = new Array();
@@ -161,6 +162,9 @@ client.on("message", function (message) {
     case "stop":
     case "q":
       mplay(args, message, command);
+      break;
+    case "helpmusic":
+      helpMusic(message);
       break;
     default:
       message.channel.send(

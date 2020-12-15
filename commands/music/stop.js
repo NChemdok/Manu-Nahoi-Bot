@@ -1,4 +1,7 @@
-const stop = (message, serverQueue) => {
+const stop = async (message, serverQueue) => {
+  const Channel = message.channel;
+  const Messages = await Channel.messages.fetch({ limit: 100 });
+
   if (!message.member.voice.channel) {
     return message.channel.send(
       "You have to be in a voice channel to stop the music!"
@@ -9,7 +12,10 @@ const stop = (message, serverQueue) => {
   }
   serverQueue.songs = [];
   serverQueue.connection.dispatcher.end();
-  return message.channel.send("Leaving Voice Channel");
+  Messages.forEach((msg) => {
+    if (msg.id === serverQueue.currentMusicPlayingMessageId) msg.delete();
+  });
+  return;
 };
 
 module.exports = stop;

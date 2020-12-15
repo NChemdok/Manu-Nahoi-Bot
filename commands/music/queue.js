@@ -2,7 +2,7 @@ const Discord = require("discord.js");
 const generateRandomColor = require("../../extras/generateRandomColor");
 
 const queue = async (message, serverQueue) => {
-  var currentSongQueue = [];
+  var currentSongQueue = "";
 
   function secondsToTime(songDurationInSeconds) {
     var hr = Math.floor(songDurationInSeconds / 3600)
@@ -33,11 +33,11 @@ const queue = async (message, serverQueue) => {
           "[" +
           songNumber +
           '] "' +
-          songTitle.substring(0, 20) +
+          songTitle.substring(0, 16) +
           "...  | Duration : " +
           formatedDuration +
           '"';
-        currentSongQueue.push(songInfoColored);
+        currentSongQueue = currentSongQueue + songInfoColored + "\n";
       }
       const color = "#" + generateRandomColor();
       const finalResponse = new Discord.MessageEmbed()
