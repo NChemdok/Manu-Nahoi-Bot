@@ -24,6 +24,7 @@ const modot = (message) => {
     "*newyear | Shows time left until New Year\n" +
     "*mutameow | Fetches random male neko image\n" +
     "*joke | Shows a random joke\n" +
+    "*dc <Duration in Minute> | Disconnects you from Voice Channel after entered Duration \n" +
     "*helpmusic | Shows All Supported Music Commands\n" +
     "More Coming Soon";
 

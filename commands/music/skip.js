@@ -15,7 +15,10 @@ const skip = async (message, serverQueue) => {
   } else {
     serverQueue.connection.dispatcher.end();
     Messages.forEach((msg) => {
-      if (msg.id === serverQueue.currentMusicPlayingMessageId) msg.delete();
+      if (msg.id === serverQueue.currentMusicPlayingMessageId) {
+        msg.delete();
+        serverQueue.currentMusicPlayingMessageId = "skipped";
+      }
     });
     message.channel.send("Skipped");
   }

@@ -28,6 +28,7 @@ const kuku = require("./commands/kuku");
 const joke = require("./commands/joke");
 const mplay = require("./commands/mplay");
 const helpMusic = require("./commands/music/musicCommands");
+const disconnect = require("./commands/disconnect");
 
 const client = new Discord.Client();
 const storyString = new Array();
@@ -150,6 +151,9 @@ client.on("message", function (message) {
       break;
     case "mutameow":
       mutameow(message);
+      break;
+    case "dc":
+      disconnect(message);
       break;
     case "modot":
       modot(message);

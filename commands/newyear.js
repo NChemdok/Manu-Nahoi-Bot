@@ -13,7 +13,7 @@ const newyear = (message) => {
 
   const today = new Date();
 
-  const xmas = new Date("January 1, 2021");
+  const xmas = new Date("January 1, 2022");
 
   const msPerDay = 24 * 60 * 60 * 1000;
   var currentOffset = today.getTimezoneOffset();

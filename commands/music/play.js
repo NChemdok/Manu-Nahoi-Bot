@@ -26,6 +26,7 @@ const play = async (args, message, serverQueue, queue) => {
       .on("finish", function () {
         serverQueue.songs.shift();
         play(guild, serverQueue.songs[0]);
+        serverQueue.currentMusicPlayingMessageId = null;
       })
       .on("error", (error) => {
         console.error(error);
@@ -59,11 +60,10 @@ const play = async (args, message, serverQueue, queue) => {
     await serverQueue.textChannel
       .send(resultResponse)
       .then((msg) => {
+        if (serverQueue.currentMusicPlayingMessageId !== "skipped") {
+          msg.delete({ timeout: (song.duration + 1) * 1000 });
+        }
         serverQueue.currentMusicPlayingMessageId = msg.id;
-        Messages.forEach((msg) => {
-          if (msg.id === serverQueue.currentMusicPlayingMessageId)
-            msg.delete({ timeout: song.duration * 1000 });
-        });
       })
       .catch(console.error);
   }
