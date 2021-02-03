@@ -1,16 +1,25 @@
 const ytdl = require("ytdl-core");
+const yts = require("yt-search");
 const Discord = require("discord.js");
 const generateRandomColor = require("../../extras/generateRandomColor");
 
 const play = async (args, message, serverQueue, queue) => {
-  if (!args[1]) {
-    return message.channel.send("Please Provide Song Link");
-  } else {
-    var songLink = args[1].toString();
+  const songSearchEntered = message.content.slice(2).trim();
+  if (!songSearchEntered) {
+    return message.channel.send("Please Provide Song Link/ Song Name");
   }
+
   const voiceChannel = message.member.voice.channel;
 
   const Messages = await message.channel.messages.fetch({ limit: 100 });
+
+  async function getTheSongDetails(songInfo) {
+    song = {
+      title: songInfo.videoDetails.title,
+      url: songInfo.videoDetails.video_url,
+      duration: songInfo.videoDetails.lengthSeconds,
+    };
+  }
 
   async function play(guild, song) {
     const serverQueue = queue.get(message.guild.id);
@@ -26,7 +35,6 @@ const play = async (args, message, serverQueue, queue) => {
       .on("finish", function () {
         serverQueue.songs.shift();
         play(guild, serverQueue.songs[0]);
-        serverQueue.currentMusicPlayingMessageId = null;
       })
       .on("error", (error) => {
         console.error(error);
@@ -57,15 +65,11 @@ const play = async (args, message, serverQueue, queue) => {
       .setTitle(`Now playing : 🎧`)
       .setThumbnail("https://s8.gifyu.com/images/logoc770e3d062e8bb72.gif")
       .addFields({ name: song.title, value: secondsToTime(song.duration) });
-    await serverQueue.textChannel
-      .send(resultResponse)
-      .then((msg) => {
-        if (serverQueue.currentMusicPlayingMessageId !== "skipped") {
-          msg.delete({ timeout: (song.duration + 1) * 1000 });
-        }
-        serverQueue.currentMusicPlayingMessageId = msg.id;
-      })
-      .catch(console.error);
+    const messageId = await serverQueue.textChannel.send(resultResponse);
+    serverQueue.currentMusicPlayingMessageId = messageId.id;
+    try {
+      messageId.delete({ timeout: (song.duration + 2) * 1000 });
+    } catch {}
   }
 
   if (!voiceChannel) {
@@ -79,16 +83,14 @@ const play = async (args, message, serverQueue, queue) => {
     );
   }
 
-  if (!ytdl.validateURL(songLink)) {
-    return message.channel.send("Invalid Link | No Song Found");
-  }
-  const songInfo = await ytdl.getBasicInfo(songLink);
-  console.log(songInfo.videoDetails.video_url);
-  const song = {
-    title: songInfo.videoDetails.title,
-    url: songInfo.videoDetails.video_url,
-    duration: songInfo.videoDetails.lengthSeconds,
-  };
+  // if (!ytdl.validateURL(songLink)) {
+  //   return message.channel.send("Invalid Link | No Song Found");
+  // }
+  // const song = {
+  //   title: songInfo.videoDetails.title,
+  //   url: songInfo.videoDetails.video_url,
+  //   duration: songInfo.videoDetails.lengthSeconds,
+  // };
 
   if (!serverQueue) {
     const queueConstruct = {
@@ -102,8 +104,21 @@ const play = async (args, message, serverQueue, queue) => {
     };
 
     queue.set(message.guild.id, queueConstruct);
+    if (ytdl.validateURL(songSearchEntered)) {
+      const songInfo = await ytdl.getInfo(songSearchEntered);
+      getTheSongDetails(songInfo);
+      queueConstruct.songs.push(song);
+    } else {
+      console.log(songSearchEntered);
+      const { videos } = await yts(songSearchEntered);
+      if (!videos.length) return message.channel.send("No songs were found!");
+      const songInfo = await ytdl.getInfo(videos[0].url);
+      getTheSongDetails(songInfo);
+      queueConstruct.songs.push(song);
+    }
 
-    queueConstruct.songs.push(song);
+    // const songInfo = await ytdl.getBasicInfo(song.url);
+    // console.log(songInfo.videoDetails.video_url);
 
     try {
       var connection = await voiceChannel.join();
@@ -115,7 +130,19 @@ const play = async (args, message, serverQueue, queue) => {
       return message.channel.send(err);
     }
   } else {
-    serverQueue.songs.push(song);
+    if (ytdl.validateURL(songSearchEntered)) {
+      const songInfo = await ytdl.getInfo(songSearchEntered);
+      getTheSongDetails(songInfo);
+      serverQueue.songs.push(song);
+    } else {
+      console.log(songSearchEntered);
+      const { videos } = await yts(songSearchEntered);
+      if (!videos.length) return message.channel.send("No songs were found!");
+      const songInfo = await ytdl.getInfo(videos[0].url);
+      getTheSongDetails(songInfo);
+      serverQueue.songs.push(song);
+    }
+
     return message.channel.send(`${song.title} has been added to queue!`);
   }
 };

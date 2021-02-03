@@ -13,7 +13,12 @@ const stop = async (message, serverQueue) => {
   serverQueue.songs = [];
   serverQueue.connection.dispatcher.end();
   Messages.forEach((msg) => {
-    if (msg.id === serverQueue.currentMusicPlayingMessageId) msg.delete();
+    if (msg.id === serverQueue.currentMusicPlayingMessageId) {
+      console.log(
+        "Skipped " + msg.id + " : " + serverQueue.currentMusicPlayingMessageId
+      );
+      msg.delete();
+    }
   });
   return;
 };
