@@ -68,7 +68,7 @@ const play = async (args, message, serverQueue, queue) => {
     const messageId = await serverQueue.textChannel.send(resultResponse);
     serverQueue.currentMusicPlayingMessageId = messageId.id;
     try {
-      messageId.delete({ timeout: (song.duration + 2) * 1000 });
+      messageId.delete({ timeout: song.duration * 1000 });
     } catch {}
   }
 
