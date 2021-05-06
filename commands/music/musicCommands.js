@@ -6,10 +6,11 @@ const musicCommands = (message) => {
     "*skip | Skip Current Song \n" +
     "*stop | Stop Music Playback \n" +
     "*q | List all Songs Currently in queue \n" +
+    "*playlistp <Playlist Name> | Queues all songs from playlist \n" +
     // "Not Available Yet :P \n" +
     // "*createplaylist <Playlist Name> | Creates own private playlist  \n" +
     // "*playlistaddsong <Playlist Name> <Song Link> | Adds song to your playlist  \n" +
-    // "*playlistp <Playlist Name> | Queues all songs from playlist \n" +
+
     // "*viewplaylist | Shows names of all of your playlist \n" +
     // "*viewplaylistsongs <Playlist Name> | Shows the Songs in Playlist \n" +
     // "*removesong <Playlist Name> <Song Number> | Removes song from the Saved Playlist\n" +

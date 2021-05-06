@@ -69,7 +69,9 @@ const play = async (args, message, serverQueue, queue) => {
     serverQueue.currentMusicPlayingMessageId = messageId.id;
     try {
       messageId.delete({ timeout: song.duration * 1000 });
-    } catch {}
+    } catch {
+      console.err();
+    }
   }
 
   if (!voiceChannel) {
