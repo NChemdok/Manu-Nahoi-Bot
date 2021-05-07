@@ -3,6 +3,7 @@ const skip = require("./music/skip");
 const stop = require("./music/stop");
 const playlistp = require("./music/playlistp");
 const q = require("./music/queue");
+const remove = require("./music/remove");
 
 const queue = new Map();
 
@@ -20,6 +21,9 @@ const mplay = (args, message, command) => {
       break;
     case "playlistp":
       playlistp(message, serverQueue, queue);
+      break;
+    case "remove":
+      remove(message, serverQueue);
       break;
     case "q":
       q(message, serverQueue);

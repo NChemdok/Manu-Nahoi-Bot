@@ -5,9 +5,10 @@ const musicCommands = (message) => {
     "*p <Song Link> | Add Song to queue \n" +
     "*skip | Skip Current Song \n" +
     "*stop | Stop Music Playback \n" +
+    "*remove <Song No> | Removes the Song no \n" +
     "*q | List all Songs Currently in queue \n" +
     "*playlistp <Playlist Name> | Queues all songs from playlist \n" +
-    // "Not Available Yet :P \n" +
+    "Online Dashboard for Custom Playlist. <Link Goes Here> \n" +
     // "*createplaylist <Playlist Name> | Creates own private playlist  \n" +
     // "*playlistaddsong <Playlist Name> <Song Link> | Adds song to your playlist  \n" +
 
