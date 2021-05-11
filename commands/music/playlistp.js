@@ -2,73 +2,43 @@ const ytdl = require("ytdl-core");
 const yts = require("yt-search");
 const Discord = require("discord.js");
 const generateRandomColor = require("../../extras/generateRandomColor");
+const firebase = require("firebase-admin");
+var serviceAccount = require("../../serviceKey.json");
+
+firebase.initializeApp({
+  credential: firebase.credential.cert(serviceAccount),
+  databaseURL: "https://manunahoidiscordbot-d7ad2.firebaseio.com",
+});
 
 const playlistp = async (message, serverQueue, queue) => {
-  const playlistName = message.content.slice(10).trim();
+  const playlistName = message.content
+    .slice(10)
+    .trim()
+    .toUpperCase()
+    .toString();
 
-  const maroon5 = [
-    "beautiful mistakes maroon 5",
-    "maps Maroon 5",
-    "memories maroon 5",
-    "payphone maroon 5",
-    "daylight maroon 5",
-  ];
+  var db = firebase.firestore();
+  console.log(playlistName);
 
-  const anime = [
-    "gurenge lisa",
-    "the town where the stars fall fukka",
-    "for you",
-    "sunshine nurarihyon",
-  ];
+  var online = [];
 
-  const korean = [
-    "running start up kdrama",
-    "start itaewon class",
-    "life goes on bts",
-    "LOVE SCENARIO ikon",
-  ];
-
-  const sanam = [
-    "chala ja ta hoon sanam",
-    "ehsan tera hoga sanam",
-    "pal pal dil ki pass tum rheti ho sanam",
-    "tere aankhon se sanam",
-    "hai apna dil sanam",
-    "gulabi aankhen sanam",
-    "tarif karoon sanam",
-    "lag ja gale sanam",
-  ];
-
-  const nightcore = [
-    "im on my way nightcore",
-    "sacred love kilzer",
-    "pandemonium nightcore",
-  ];
-
-  const mix = [
-    "take me back to when we were kids bangers",
-    "its okay if you forget me astrid",
-    "we can be kings again",
-    "at my worst",
-    "can you come thru jermy",
-  ];
-
-  message.channel.send("Queuing Songs...");
-  if (playlistName.toLowerCase() === "maroon 5") {
-    var songlinks = maroon5;
-  } else if (playlistName.toLowerCase() === "anime") {
-    var songlinks = anime;
-  } else if (playlistName.toLowerCase() === "korean") {
-    var songlinks = korean;
-  } else if (playlistName.toLowerCase() === "sanam") {
-    var songlinks = sanam;
-  } else if (playlistName.toLowerCase() === "nightcore") {
-    var songlinks = nightcore;
-  } else if (playlistName.toLowerCase() === "mix") {
-    var songlinks = mix;
+  const songRef = db
+    .collection("user")
+    .doc("DiscordID")
+    .collection("playlist")
+    .doc(playlistName);
+  const doc = await songRef.get("songs");
+  if (!doc.exists) {
+    message.channel.send("Playlist Doesn't Exist !!!");
   } else {
-    message.channel.send("Playlist Not Found !!!");
+    doc.get("songs").forEach(function (doc) {
+      console.log(doc.toString());
+      online.push(doc.toString());
+    });
+    message.channel.send("Queuing Songs...");
   }
+
+  var songlinks = online;
 
   const voiceChannel = message.member.voice.channel;
 
@@ -89,7 +59,12 @@ const playlistp = async (message, serverQueue, queue) => {
       return;
     }
 
-    const dispatcher = serverQueue.connection.play(ytdl(song.url));
+    const dispatcher = serverQueue.connection.play(
+      ytdl(song.url, {
+        quality: "highestaudio",
+        highWaterMark: 1 << 25,
+      })
+    );
     dispatcher
       .on("finish", function () {
         serverQueue.songs.shift();
@@ -183,7 +158,7 @@ const playlistp = async (message, serverQueue, queue) => {
     }
   }
 
-  if (songlinks) {
+  if (songlinks.length !== 0) {
     return message.channel.send(
       `${songlinks.length} Songs from ${playlistName} playlist has been added to queue!`
     );

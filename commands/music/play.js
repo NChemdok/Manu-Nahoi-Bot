@@ -30,7 +30,12 @@ const play = async (args, message, serverQueue, queue) => {
       return;
     }
 
-    const dispatcher = serverQueue.connection.play(ytdl(song.url));
+    const dispatcher = serverQueue.connection.play(
+      ytdl(song.url, {
+        quality: "highestaudio",
+        highWaterMark: 1 << 25,
+      })
+    );
     dispatcher
       .on("finish", function () {
         serverQueue.songs.shift();
