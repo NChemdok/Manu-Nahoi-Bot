@@ -3,6 +3,7 @@ const generateRandomColor = require("../extras/generateRandomColor");
 
 const modot = (message) => {
   const commands =
+    "Official Bot Website -> [CLICK HERE](https://manunahoi.web.app/) \n" +
     "*kikhaishe <@User> | To Show what they ate \n" +
     "*shakal <@User> | To Show Profile Picture \n" +
     "*ping | To test if Bot Server Active \n" +

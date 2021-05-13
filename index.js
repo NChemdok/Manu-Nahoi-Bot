@@ -167,6 +167,9 @@ client.on("message", function (message) {
     case "q":
     case "remove":
     case "playlistp":
+    case "shuffle":
+    case "pause":
+    case "resume":
       mplay(args, message, command);
       break;
     case "helpmusic":

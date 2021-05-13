@@ -5,10 +5,13 @@ const musicCommands = (message) => {
     "*p <Song Link> | Add Song to queue \n" +
     "*skip | Skip Current Song \n" +
     "*stop | Stop Music Playback \n" +
+    "*pause | Pause Music Playback \n" +
+    "*resume | Resume Music Playback \n" +
+    "*shuffle | Randomize the order of songs in playlist \n" +
     "*remove <Song No> | Removes the Song no \n" +
     "*q | List all Songs Currently in queue \n" +
     "*playlistp <Playlist Name> | Queues all songs from playlist \n" +
-    "Online Dashboard for Custom Playlist. <Link Goes Here> \n" +
+    "Online Dashboard [Click Here to Manage Your Custom Playlist](https://manunahoi.web.app/) \n" +
     // "*createplaylist <Playlist Name> | Creates own private playlist  \n" +
     // "*playlistaddsong <Playlist Name> <Song Link> | Adds song to your playlist  \n" +
 

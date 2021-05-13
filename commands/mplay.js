@@ -4,6 +4,9 @@ const stop = require("./music/stop");
 const playlistp = require("./music/playlistp");
 const q = require("./music/queue");
 const remove = require("./music/remove");
+const shuffle = require("./music/shuffle");
+const pause = require("./music/pause");
+const resume = require("./music/resume");
 
 const queue = new Map();
 
@@ -22,8 +25,17 @@ const mplay = (args, message, command) => {
     case "playlistp":
       playlistp(message, serverQueue, queue);
       break;
+    case "shuffle":
+      shuffle(message, serverQueue, queue);
+      break;
     case "remove":
       remove(message, serverQueue);
+      break;
+    case "pause":
+      pause(message, serverQueue);
+      break;
+    case "resume":
+      resume(message, serverQueue);
       break;
     case "q":
       q(message, serverQueue);
