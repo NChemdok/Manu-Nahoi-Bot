@@ -32,7 +32,6 @@ const playlistp = async (message, serverQueue, queue) => {
     message.channel.send("Playlist Doesn't Exist !!!");
   } else {
     doc.get("songs").forEach(function (doc) {
-      console.log(doc.toString());
       online.push(doc.toString());
     });
     message.channel.send("Queuing Songs...");
@@ -69,6 +68,7 @@ const playlistp = async (message, serverQueue, queue) => {
       .on("finish", function () {
         serverQueue.songs.shift();
         play(guild, serverQueue.songs[0]);
+        serverQueue.lastCommandUsed = "Not Skipped";
       })
       .on("error", (error) => {
         console.error(error);
@@ -99,13 +99,13 @@ const playlistp = async (message, serverQueue, queue) => {
       .setTitle(`Now playing : 🎧`)
       .setThumbnail("https://s8.gifyu.com/images/logoc770e3d062e8bb72.gif")
       .addFields({ name: song.title, value: secondsToTime(song.duration) });
+
     const messageId = await serverQueue.textChannel.send(resultResponse);
     serverQueue.currentMusicPlayingMessageId = messageId.id;
-    try {
-      messageId.delete({ timeout: song.duration * 1000 });
-    } catch {
-      console.err();
-    }
+    serverQueue.playbackTimeoutID = setTimeout(
+      () => messageId.delete(),
+      song.duration * 1000
+    );
   }
 
   if (!serverQueue) {
@@ -116,6 +116,7 @@ const playlistp = async (message, serverQueue, queue) => {
       songs: [],
       volume: 5,
       currentMusicPlayingMessageId: null,
+      playbackTimeoutID: null,
       playing: true,
     };
 
@@ -127,20 +128,24 @@ const playlistp = async (message, serverQueue, queue) => {
         queueConstruct.songs.push(song);
       } else {
         const { videos } = await yts(songlinks[songs]);
-        if (!videos.length) return message.channel.send("No songs were found!");
+        if (!videos.length) {
+          continue;
+        }
         const songInfo = await ytdl.getInfo(videos[0].url);
         getTheSongDetails(songInfo);
         queueConstruct.songs.push(song);
+        if (queueConstruct.songs.length <= 1) {
+          try {
+            var connection = await voiceChannel.join();
+            queueConstruct.connection = connection;
+            play(message.guild, queueConstruct.songs[0]);
+          } catch (err) {
+            console.log(err);
+            queue.delete(message.guild.id);
+            return message.channel.send(err);
+          }
+        }
       }
-    }
-    try {
-      var connection = await voiceChannel.join();
-      queueConstruct.connection = connection;
-      play(message.guild, queueConstruct.songs[0]);
-    } catch (err) {
-      console.log(err);
-      queue.delete(message.guild.id);
-      return message.channel.send(err);
     }
   } else {
     for (songs in songlinks) {
@@ -150,7 +155,9 @@ const playlistp = async (message, serverQueue, queue) => {
         serverQueue.songs.push(song);
       } else {
         const { videos } = await yts(songlinks[songs]);
-        if (!videos.length) return message.channel.send("No songs were found!");
+        if (!videos.length) {
+          continue;
+        }
         const songInfo = await ytdl.getInfo(videos[0].url);
         getTheSongDetails(songInfo);
         serverQueue.songs.push(song);

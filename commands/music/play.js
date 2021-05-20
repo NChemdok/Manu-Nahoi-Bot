@@ -70,13 +70,13 @@ const play = async (args, message, serverQueue, queue) => {
       .setTitle(`Now playing : 🎧`)
       .setThumbnail("https://s8.gifyu.com/images/logoc770e3d062e8bb72.gif")
       .addFields({ name: song.title, value: secondsToTime(song.duration) });
+
     const messageId = await serverQueue.textChannel.send(resultResponse);
     serverQueue.currentMusicPlayingMessageId = messageId.id;
-    try {
-      messageId.delete({ timeout: song.duration * 1000 });
-    } catch {
-      console.err();
-    }
+    serverQueue.playbackTimeoutID = setTimeout(
+      () => messageId.delete(),
+      song.duration * 1000
+    );
   }
 
   if (!voiceChannel) {
@@ -90,15 +90,6 @@ const play = async (args, message, serverQueue, queue) => {
     );
   }
 
-  // if (!ytdl.validateURL(songLink)) {
-  //   return message.channel.send("Invalid Link | No Song Found");
-  // }
-  // const song = {
-  //   title: songInfo.videoDetails.title,
-  //   url: songInfo.videoDetails.video_url,
-  //   duration: songInfo.videoDetails.lengthSeconds,
-  // };
-
   if (!serverQueue) {
     const queueConstruct = {
       textChannel: message.channel,
@@ -107,6 +98,7 @@ const play = async (args, message, serverQueue, queue) => {
       songs: [],
       volume: 5,
       currentMusicPlayingMessageId: null,
+      playbackTimeoutID: null,
       playing: true,
     };
 

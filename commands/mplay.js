@@ -7,6 +7,7 @@ const remove = require("./music/remove");
 const shuffle = require("./music/shuffle");
 const pause = require("./music/pause");
 const resume = require("./music/resume");
+const spotify = require("./music/spotify");
 
 const queue = new Map();
 
@@ -36,6 +37,9 @@ const mplay = (args, message, command) => {
       break;
     case "resume":
       resume(message, serverQueue);
+      break;
+    case "spotify":
+      spotify(message, serverQueue);
       break;
     case "q":
       q(message, serverQueue);

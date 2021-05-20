@@ -37,7 +37,13 @@ const queue = async (message, serverQueue) => {
           "...  | Duration : " +
           formatedDuration +
           '"';
-        currentSongQueue = currentSongQueue + songInfoColored + "\n";
+        if (i > 19) {
+          const songsRemaining = serverQueue.songs.length - 20;
+          currentSongQueue = `${currentSongQueue} \n And ${songsRemaining} More Songs in Queue`;
+          break;
+        } else {
+          currentSongQueue = currentSongQueue + songInfoColored + "\n";
+        }
       }
       const color = "#" + generateRandomColor();
       const finalResponse = new Discord.MessageEmbed()

@@ -170,6 +170,7 @@ client.on("message", function (message) {
     case "shuffle":
     case "pause":
     case "resume":
+    case "spotify":
       mplay(args, message, command);
       break;
     case "helpmusic":

@@ -7,6 +7,7 @@ const musicCommands = (message) => {
     "*stop | Stop Music Playback \n" +
     "*pause | Pause Music Playback \n" +
     "*resume | Resume Music Playback \n" +
+    "*spotify <Playlistname> <Playlist Link> | Add tracks from spotify playlist into custom playlist \n" +
     "*shuffle | Randomize the order of songs in playlist \n" +
     "*remove <Song No> | Removes the Song no \n" +
     "*q | List all Songs Currently in queue \n" +
