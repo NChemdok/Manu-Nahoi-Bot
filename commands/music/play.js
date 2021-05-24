@@ -71,12 +71,16 @@ const play = async (args, message, serverQueue, queue) => {
       .setThumbnail("https://s8.gifyu.com/images/logoc770e3d062e8bb72.gif")
       .addFields({ name: song.title, value: secondsToTime(song.duration) });
 
-    const messageId = await serverQueue.textChannel.send(resultResponse);
-    serverQueue.currentMusicPlayingMessageId = messageId.id;
-    serverQueue.playbackTimeoutID = setTimeout(
-      () => messageId.delete(),
-      song.duration * 1000
-    );
+    try {
+      const messageId = await serverQueue.textChannel.send(resultResponse);
+      serverQueue.currentMusicPlayingMessageId = messageId.id;
+      serverQueue.playbackTimeoutID = setTimeout(
+        () => messageId.delete(),
+        song.duration * 1000
+      );
+    } catch {
+      console.error();
+    }
   }
 
   if (!voiceChannel) {

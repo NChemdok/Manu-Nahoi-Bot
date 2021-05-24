@@ -11,35 +11,13 @@ firebase.initializeApp({
 });
 
 const playlistp = async (message, serverQueue, queue) => {
+  const voiceChannel = message.member.voice.channel;
+
   const playlistName = message.content
     .slice(10)
     .trim()
     .toUpperCase()
     .toString();
-
-  var db = firebase.firestore();
-  console.log(playlistName);
-
-  var online = [];
-
-  const songRef = db
-    .collection("user")
-    .doc("DiscordID")
-    .collection("playlist")
-    .doc(playlistName);
-  const doc = await songRef.get("songs");
-  if (!doc.exists) {
-    message.channel.send("Playlist Doesn't Exist !!!");
-  } else {
-    doc.get("songs").forEach(function (doc) {
-      online.push(doc.toString());
-    });
-    message.channel.send("Queuing Songs...");
-  }
-
-  var songlinks = online;
-
-  const voiceChannel = message.member.voice.channel;
 
   async function getTheSongDetails(songInfo) {
     song = {
@@ -68,7 +46,6 @@ const playlistp = async (message, serverQueue, queue) => {
       .on("finish", function () {
         serverQueue.songs.shift();
         play(guild, serverQueue.songs[0]);
-        serverQueue.lastCommandUsed = "Not Skipped";
       })
       .on("error", (error) => {
         console.error(error);
@@ -100,15 +77,41 @@ const playlistp = async (message, serverQueue, queue) => {
       .setThumbnail("https://s8.gifyu.com/images/logoc770e3d062e8bb72.gif")
       .addFields({ name: song.title, value: secondsToTime(song.duration) });
 
-    const messageId = await serverQueue.textChannel.send(resultResponse);
-    serverQueue.currentMusicPlayingMessageId = messageId.id;
-    serverQueue.playbackTimeoutID = setTimeout(
-      () => messageId.delete(),
-      song.duration * 1000
-    );
+    try {
+      const messageId = await serverQueue.textChannel.send(resultResponse);
+      serverQueue.currentMusicPlayingMessageId = messageId.id;
+      serverQueue.playbackTimeoutID = setTimeout(
+        () => messageId.delete(),
+        song.duration * 1000
+      );
+    } catch {
+      console.error();
+    }
   }
 
-  if (!serverQueue) {
+  async function fetchDataFromFirestore(playlistName) {
+    var db = firebase.firestore();
+    console.log(playlistName);
+
+    var online = [];
+
+    const songRef = db
+      .collection("user")
+      .doc("DiscordID")
+      .collection("playlist")
+      .doc(playlistName);
+    const doc = await songRef.get("songs");
+    if (!doc.exists) {
+      return;
+    } else {
+      doc.get("songs").forEach(function (doc) {
+        online.push(doc.toString());
+      });
+      return online;
+    }
+  }
+
+  async function ifBotNotPlaying(songlinks) {
     const queueConstruct = {
       textChannel: message.channel,
       voiceChannel: voiceChannel,
@@ -117,26 +120,31 @@ const playlistp = async (message, serverQueue, queue) => {
       volume: 5,
       currentMusicPlayingMessageId: null,
       playbackTimeoutID: null,
-      playing: true,
+      songLinks: songlinks,
     };
 
     queue.set(message.guild.id, queueConstruct);
-    for (songs in songlinks) {
-      if (ytdl.validateURL(songlinks[songs])) {
-        const songInfo = await ytdl.getInfo(songlinks[songs]);
+
+    var connection = await voiceChannel.join();
+    for (songs in queueConstruct.songLinks) {
+      if (!queueConstruct.songLinks) {
+        return message.channel.send("Queuing songs terminated");
+      }
+      if (ytdl.validateURL(queueConstruct.songLinks[songs])) {
+        const songInfo = await ytdl.getInfo(queueConstruct.songLinks[songs]);
         getTheSongDetails(songInfo);
         queueConstruct.songs.push(song);
       } else {
-        const { videos } = await yts(songlinks[songs]);
+        const { videos } = await yts(queueConstruct.songLinks[songs]);
         if (!videos.length) {
+          11;
           continue;
         }
         const songInfo = await ytdl.getInfo(videos[0].url);
         getTheSongDetails(songInfo);
         queueConstruct.songs.push(song);
-        if (queueConstruct.songs.length <= 1) {
+        if (songs == 0) {
           try {
-            var connection = await voiceChannel.join();
             queueConstruct.connection = connection;
             play(message.guild, queueConstruct.songs[0]);
           } catch (err) {
@@ -147,7 +155,12 @@ const playlistp = async (message, serverQueue, queue) => {
         }
       }
     }
-  } else {
+    return message.channel.send(
+      `${songlinks.length} Songs from ${playlistName} playlist has been added to queue!`
+    );
+  }
+
+  async function ifBotPlaying(serverQueue, songlinks) {
     for (songs in songlinks) {
       if (ytdl.validateURL(songlinks[songs])) {
         const songInfo = await ytdl.getInfo(songlinks[songs]);
@@ -163,12 +176,39 @@ const playlistp = async (message, serverQueue, queue) => {
         serverQueue.songs.push(song);
       }
     }
-  }
-
-  if (songlinks.length !== 0) {
     return message.channel.send(
       `${songlinks.length} Songs from ${playlistName} playlist has been added to queue!`
     );
+  }
+
+  async function addSongsToTheQueue(songlinks) {
+    message.channel.send("Queuing Songs...");
+    if (!serverQueue) {
+      await ifBotNotPlaying(songlinks);
+    } else {
+      await ifBotPlaying(serverQueue, songlinks);
+    }
+  }
+
+  if (!voiceChannel) {
+    return message.channel.send("You need to be in a voice channel");
+  }
+
+  const permissions = voiceChannel.permissionsFor(message.client.user);
+  if (!permissions.has("CONNECT") || !permissions.has("SPEAK")) {
+    return message.channel.send(
+      "I need permissions to join and speak in the voice channel"
+    );
+  }
+
+  try {
+    var songlinks = await fetchDataFromFirestore(playlistName);
+    if (!Array.isArray(songlinks)) {
+      return message.channel.send("Playlist Doesn't Exist !!!");
+    }
+    addSongsToTheQueue(songlinks);
+  } catch {
+    console.error();
   }
 };
 

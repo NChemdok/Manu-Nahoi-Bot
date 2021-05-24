@@ -171,6 +171,8 @@ client.on("message", function (message) {
     case "pause":
     case "resume":
     case "spotify":
+    case "allplaylist":
+    case "deleteplaylist":
       mplay(args, message, command);
       break;
     case "helpmusic":

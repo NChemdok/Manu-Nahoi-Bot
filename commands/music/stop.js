@@ -12,11 +12,9 @@ const stop = async (message, serverQueue) => {
   }
   serverQueue.songs = [];
   serverQueue.connection.dispatcher.end();
+  serverQueue.songLinks = null;
   Messages.forEach((msg) => {
     if (msg.id === serverQueue.currentMusicPlayingMessageId) {
-      console.log(
-        "Skipped " + msg.id + " : " + serverQueue.currentMusicPlayingMessageId
-      );
       msg.delete();
     }
   });

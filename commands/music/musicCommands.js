@@ -12,7 +12,8 @@ const musicCommands = (message) => {
     "*remove <Song No> | Removes the Song no \n" +
     "*q | List all Songs Currently in queue \n" +
     "*playlistp <Playlist Name> | Queues all songs from playlist \n" +
-    "Online Dashboard [Click Here to Manage Your Custom Playlist](https://manunahoi.web.app/) \n" +
+    "*allplaylist | List all the Playlist Names \n" +
+    // "Online Dashboard [Click Here to Manage Your Custom Playlist](https://manunahoi.web.app/) \n" +
     // "*createplaylist <Playlist Name> | Creates own private playlist  \n" +
     // "*playlistaddsong <Playlist Name> <Song Link> | Adds song to your playlist  \n" +
 
