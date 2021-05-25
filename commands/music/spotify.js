@@ -1,7 +1,6 @@
 const { getData, getPreview, getTracks } = require("spotify-url-info");
 
 const firebase = require("firebase-admin");
-var serviceAccount = require("../../serviceKey.json");
 
 const spotify = async (message, serverQueue) => {
   const songInfoFromUser = message.content.slice(8).trim();
