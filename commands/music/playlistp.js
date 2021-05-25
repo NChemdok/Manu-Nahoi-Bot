@@ -3,10 +3,18 @@ const yts = require("yt-search");
 const Discord = require("discord.js");
 const generateRandomColor = require("../../extras/generateRandomColor");
 const firebase = require("firebase-admin");
-var serviceAccount = require("../../serviceKey.json");
+const { FIREBASE_CLIENT_EMAIL, FIREBASE_PRIVATE_KEY, FIREBASE_PROJECT_ID } =
+  process.env;
 
 firebase.initializeApp({
-  credential: firebase.credential.cert(serviceAccount),
+  credential: firebase.credential.cert({
+    project_id: FIREBASE_PROJECT_ID,
+    private_key:
+      FIREBASE_PRIVATE_KEY[0] === "-"
+        ? FIREBASE_PRIVATE_KEY
+        : JSON.parse(FIREBASE_PRIVATE_KEY),
+    client_email: FIREBASE_CLIENT_EMAIL,
+  }),
   databaseURL: "https://manunahoidiscordbot-d7ad2.firebaseio.com",
 });
 
@@ -125,7 +133,6 @@ const playlistp = async (message, serverQueue, queue) => {
 
     queue.set(message.guild.id, queueConstruct);
 
-    var connection = await voiceChannel.join();
     for (songs in queueConstruct.songLinks) {
       if (!queueConstruct.songLinks) {
         return message.channel.send("Queuing songs terminated");
@@ -145,6 +152,7 @@ const playlistp = async (message, serverQueue, queue) => {
         queueConstruct.songs.push(song);
         if (songs == 0) {
           try {
+            var connection = await voiceChannel.join();
             queueConstruct.connection = connection;
             play(message.guild, queueConstruct.songs[0]);
           } catch (err) {
@@ -155,19 +163,24 @@ const playlistp = async (message, serverQueue, queue) => {
         }
       }
     }
+    queueConstruct.songLinks = [];
     return message.channel.send(
-      `${songlinks.length} Songs from ${playlistName} playlist has been added to queue!`
+      `${queueConstruct.songs.length} Songs from ${playlistName} playlist has been added to queue!`
     );
   }
 
   async function ifBotPlaying(serverQueue, songlinks) {
-    for (songs in songlinks) {
-      if (ytdl.validateURL(songlinks[songs])) {
-        const songInfo = await ytdl.getInfo(songlinks[songs]);
+    serverQueue.songLinks = songlinks;
+    for (songs in serverQueue.songLinks) {
+      if (!serverQueue.songLinks) {
+        return message.channel.send("Queuing songs terminated");
+      }
+      if (ytdl.validateURL(serverQueue.songLinks[songs])) {
+        const songInfo = await ytdl.getInfo(serverQueue.songLinks[songs]);
         getTheSongDetails(songInfo);
         serverQueue.songs.push(song);
       } else {
-        const { videos } = await yts(songlinks[songs]);
+        const { videos } = await yts(serverQueue.songLinks[songs]);
         if (!videos.length) {
           continue;
         }
@@ -177,7 +190,7 @@ const playlistp = async (message, serverQueue, queue) => {
       }
     }
     return message.channel.send(
-      `${songlinks.length} Songs from ${playlistName} playlist has been added to queue!`
+      `${serverQueue.songLinks.length} Songs from ${playlistName} playlist has been added to queue!`
     );
   }
 
