@@ -33,8 +33,8 @@ const queue = async (message, serverQueue) => {
           "[" +
           songNumber +
           '] "' +
-          songTitle.substring(0, 16) +
-          "...  | Duration : " +
+          songTitle.substring(0, 26) +
+          "...  | " +
           formatedDuration +
           '"';
         if (i > 19) {

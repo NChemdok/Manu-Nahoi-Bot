@@ -19,6 +19,8 @@ firebase.initializeApp({
 
 const playlistp = async (message, serverQueue, queue) => {
   const voiceChannel = message.member.voice.channel;
+  const userName = message.mentions.users.first() || message.author;
+  const discordUserID = userName.id.toString().trim();
 
   const playlistName = message.content
     .slice(10)
@@ -41,13 +43,12 @@ const playlistp = async (message, serverQueue, queue) => {
 
   async function fetchDataFromFirestore(playlistName) {
     var db = firebase.firestore();
-    console.log(playlistName);
 
     var online = [];
 
     const songRef = db
       .collection("user")
-      .doc("DiscordID")
+      .doc(discordUserID)
       .collection("playlist")
       .doc(playlistName);
     const doc = await songRef.get("songs");
@@ -83,38 +84,6 @@ const playlistp = async (message, serverQueue, queue) => {
     }
     queueConstruct.connection = connection;
     return queueConstruct;
-    // while (queueConstruct.songLinks.length >= 1) {
-    //   const currentSong = queueConstruct.songLinks.shift();
-    //   if (ytdl.validateURL(currentSong)) {
-    //     const songInfo = await ytdl.getInfo(currentSong);
-    //     getTheSongDetails(songInfo);
-    //     queueConstruct.songs.push(song);
-    //   } else {
-    //     const { videos } = await yts(currentSong);
-    //     if (!videos.length) {
-    //       continue;
-    //     }
-    //     const songInfo = await ytdl.getInfo(videos[0].url);
-    //     getTheSongDetails(songInfo);
-    //     queueConstruct.songs.push(song);
-    //     if (queueConstruct.songs.length == 1) {
-    //       try {
-    //         var connection = await voiceChannel.join();
-    //         queueConstruct.connection = connection;
-    //         play(message.guild, queueConstruct.songs[0]);
-    //       } catch (err) {
-    //         console.log(err);
-    //         return message.channel.send(
-    //           "Something Went Wrong. Please Try again"
-    //         );
-    //       }
-    //     }
-    //   }
-    // if (queueConstruct) {
-    //   return message.channel.send(
-    //     `${queueConstruct.songs.length} Songs from ${playlistName} playlist has been added to queue!`
-    //   );
-    // }
   }
 
   async function ifBotPlaying(serverQueue, songlinks) {
@@ -141,9 +110,10 @@ const playlistp = async (message, serverQueue, queue) => {
       }
     }
     if (serverQueue) {
-      return message.channel.send(
-        `${serverQueue.songs.length} Songs from ${playlistName} playlist has been added to queue!`
+      message.channel.send(
+        `${serverQueue.songLinks.length} Songs from ${playlistName} playlist has been added to queue!`
       );
+      return (serverQueue.songLinks = []);
     }
   }
 

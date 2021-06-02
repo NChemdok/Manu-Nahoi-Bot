@@ -9,15 +9,13 @@ const musicCommands = (message) => {
     "*resume | Resume Music Playback \n" +
     "*spotify <Playlistname> <Playlist Link> | Add tracks from spotify playlist into custom playlist \n" +
     "*shuffle | Randomize the order of songs in playlist \n" +
-    "*remove <Song No> | Removes the Song no \n" +
+    "*remove <Song No> | Removes the Song no from Queue \n" +
     "*q | List all Songs Currently in queue \n" +
     "*playlistp <Playlist Name> | Queues all songs from playlist \n" +
     "*allplaylist | List all the Playlist Names \n" +
     // "Online Dashboard [Click Here to Manage Your Custom Playlist](https://manunahoi.web.app/) \n" +
     // "*createplaylist <Playlist Name> | Creates own private playlist  \n" +
     // "*playlistaddsong <Playlist Name> <Song Link> | Adds song to your playlist  \n" +
-
-    // "*viewplaylist | Shows names of all of your playlist \n" +
     // "*viewplaylistsongs <Playlist Name> | Shows the Songs in Playlist \n" +
     // "*removesong <Playlist Name> <Song Number> | Removes song from the Saved Playlist\n" +
     "More Coming Soon :P";

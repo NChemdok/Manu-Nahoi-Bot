@@ -4,6 +4,8 @@ const firebase = require("firebase-admin");
 
 const spotify = async (message, serverQueue) => {
   const songInfoFromUser = message.content.slice(8).trim();
+  const userName = message.author;
+  const discordUserID = userName.id.toString().trim();
 
   const playlistName = songInfoFromUser
     .substring(0, songInfoFromUser.lastIndexOf(" "))
@@ -21,7 +23,7 @@ const spotify = async (message, serverQueue) => {
   var db = firebase.firestore();
   const songRef = db
     .collection("user")
-    .doc("DiscordID")
+    .doc(discordUserID)
     .collection("playlist")
     .doc(playlistName);
 
@@ -33,7 +35,7 @@ const spotify = async (message, serverQueue) => {
   }
 
   message.channel.send(
-    `Adding Song to ${playlistName} Playlist, This may take a while based on the number of songs in playlist`
+    `Adding Songs to ${playlistName} Playlist, This may take a while based on the number of songs in playlist`
   );
   for (items in songs) {
     const songID = "https://open.spotify.com/track/" + songs[items].id;
