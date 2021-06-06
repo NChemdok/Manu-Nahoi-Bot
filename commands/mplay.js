@@ -10,6 +10,7 @@ const resume = require("./music/resume");
 const spotify = require("./music/spotify");
 const allPlaylist = require("./music/allPlaylist");
 const deletePlaylist = require("./music/deletePlaylist");
+const skipTo = require("./music/skipTo");
 
 const queue = new Map();
 
@@ -24,6 +25,9 @@ const mplay = (args, message, command) => {
       break;
     case "skip":
       skip(message, serverQueue);
+      break;
+    case "skipto":
+      skipTo(message, serverQueue);
       break;
     case "playlistp":
       playlistp(message, serverQueue, queue);

@@ -58,7 +58,7 @@ const player = async (guild, song, message, queue) => {
     .addFields({ name: song.title, value: secondsToTime(song.duration) });
 
   try {
-    const messageId = await serverQueue.textChannel.send(resultResponse);
+    var messageId = await serverQueue.textChannel.send(resultResponse);
     serverQueue.currentMusicPlayingMessageId = messageId.id;
     serverQueue.playbackTimeoutID = setTimeout(
       () => messageId.delete(),

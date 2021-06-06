@@ -10,14 +10,15 @@ const stop = async (message, serverQueue) => {
   if (!serverQueue) {
     return message.channel.send("Bot not playing currently");
   }
-  serverQueue.songs = [];
-  serverQueue.connection.dispatcher.end();
-  serverQueue.songLinks = null;
+
   Messages.forEach((msg) => {
     if (msg.id === serverQueue.currentMusicPlayingMessageId) {
       msg.delete();
     }
   });
+  serverQueue.songs = [];
+  serverQueue.connection.dispatcher.end();
+  serverQueue.songLinks = null;
   return;
 };
 

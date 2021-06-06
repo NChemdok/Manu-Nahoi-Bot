@@ -4,6 +4,7 @@ const musicCommands = (message) => {
   const commands =
     "*p <Song Link> | Add Song to queue \n" +
     "*skip | Skip Current Song \n" +
+    "*skipto <Song Number> | Skip to Song Number in Queue \n" +
     "*stop | Stop Music Playback \n" +
     "*pause | Pause Music Playback \n" +
     "*resume | Resume Music Playback \n" +

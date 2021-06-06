@@ -173,6 +173,7 @@ client.on("message", function (message) {
     case "spotify":
     case "allplaylist":
     case "deleteplaylist":
+    case "skipto":
       mplay(args, message, command);
       break;
     case "helpmusic":

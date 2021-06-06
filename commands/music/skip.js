@@ -2,7 +2,7 @@ const skip = async (message, serverQueue) => {
   const Channel = message.channel;
   const Messages = await Channel.messages.fetch({ limit: 100 });
   if (!message.member.voice.channel) {
-    message.channel.send(
+    return message.channel.send(
       "You have to be in a voice channel to skip the music!"
     );
   }
@@ -13,14 +13,14 @@ const skip = async (message, serverQueue) => {
   if (serverQueue.songs.length === 1) {
     message.channel.send("Reached the end of queue :(");
   } else {
-    serverQueue.connection.dispatcher.end();
     Messages.forEach((msg) => {
       if (msg.id === serverQueue.currentMusicPlayingMessageId) {
         msg.delete();
       }
     });
+    serverQueue.connection.dispatcher.end();
     clearTimeout(serverQueue.playbackTimeoutID);
-    message.channel.send("Skipped");
+    return message.channel.send("Skipped");
   }
 };
 
