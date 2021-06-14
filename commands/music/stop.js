@@ -18,7 +18,7 @@ const stop = async (message, serverQueue) => {
   });
   serverQueue.songs = [];
   serverQueue.connection.dispatcher.end();
-  serverQueue.songLinks = null;
+  serverQueue.songLinks = [];
   return;
 };
 

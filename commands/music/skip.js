@@ -18,8 +18,8 @@ const skip = async (message, serverQueue) => {
         msg.delete();
       }
     });
-    serverQueue.connection.dispatcher.end();
     clearTimeout(serverQueue.playbackTimeoutID);
+    serverQueue.connection.dispatcher.end();
     return message.channel.send("Skipped");
   }
 };
