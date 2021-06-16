@@ -25,6 +25,12 @@ const skipTo = async (message, serverQueue) => {
       }
     });
   }
+  if (
+    intSongNumber > serverQueue.songs.length ||
+    serverQueue.songs.length == 1
+  ) {
+    return message.channel.send("Queue does not have that many songs :(");
+  }
   for (var i = 1; i < intSongNumber - 1; i++) {
     serverQueue.songs.shift();
   }

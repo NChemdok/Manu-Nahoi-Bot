@@ -45,39 +45,11 @@ const play = async (args, message, serverQueue, queue) => {
     }
     queueConstruct.connection = connection;
     return queueConstruct;
-
-    // for (songs in queueConstruct.songLinks) {
-    //   if (ytdl.validateURL(queueConstruct.songLinks[songs])) {
-    //     const songInfo = await ytdl.getInfo(queueConstruct.songLinks[songs]);
-    //     getTheSongDetails(songInfo);
-    //     queueConstruct.songs.push(song);
-    //     queueConstruct.songLinks.shift();
-    //   } else {
-    //     const { videos } = await yts(queueConstruct.songLinks[songs]);
-    //     if (!videos.length) return message.channel.send("No songs were found!");
-    //     const songInfo = await ytdl.getInfo(videos[0].url);
-    //     getTheSongDetails(songInfo);
-    //     queueConstruct.songs.push(song);
-    //     queueConstruct.songLinks.shift();
-    //   }
-
-    //   try {
-    //     var connection = await voiceChannel.join();
-    //     queueConstruct.connection = connection;
-    //     play(message.guild, queueConstruct.songs[0]);
-    //   } catch (err) {
-    //     console.log(err);
-    //     return message.channel.send("Something Went Wrong. Please Try again");
-    //   }
-    // }
-    // queueConstruct.songLinks = [];
-    // return message.channel.send(`${song.title} has been added to queue!`);
   }
 
   async function ifBotPlaying(serverQueue, songlinks) {
     serverQueue.songLinks = songlinks;
     for (songs in serverQueue.songLinks) {
-      console.log(serverQueue.songLinks[songs]);
       if (ytdl.validateURL(serverQueue.songLinks[songs])) {
         const songInfo = await ytdl.getInfo(serverQueue.songLinks[songs]);
         getTheSongDetails(songInfo);
