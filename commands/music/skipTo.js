@@ -24,6 +24,7 @@ const skipTo = async (message, serverQueue) => {
         msg.delete();
       }
     });
+    clearTimeout(serverQueue.playbackTimeoutID);
   }
   if (
     intSongNumber > serverQueue.songs.length ||

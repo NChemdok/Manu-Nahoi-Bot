@@ -16,6 +16,7 @@ const stop = async (message, serverQueue) => {
       msg.delete();
     }
   });
+  clearTimeout(serverQueue.playbackTimeoutID);
   serverQueue.songs = [];
   serverQueue.connection.dispatcher.end();
   serverQueue.songLinks = [];
