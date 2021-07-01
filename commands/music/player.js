@@ -64,8 +64,8 @@ const player = async (guild, song, message, queue) => {
       () => messageId.delete(),
       song.duration * 1000
     );
-  } catch {
-    console.error();
+  } catch (err) {
+    console.log(err);
   }
 };
 
