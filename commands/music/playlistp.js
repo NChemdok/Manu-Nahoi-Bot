@@ -89,7 +89,7 @@ const playlistp = async (message, serverQueue, queue) => {
   async function ifBotPlaying(serverQueue, songlinks) {
     serverQueue.songLinks = songlinks;
     for (song in serverQueue.songLinks) {
-      if (serverQueue.songLinks === null) {
+      if (serverQueue.songLinks.length == 0) {
         return message.channel.send("Queuing Terminated");
       }
       if (ytdl.validateURL(serverQueue.songLinks[song])) {
