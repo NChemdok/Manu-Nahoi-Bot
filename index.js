@@ -34,20 +34,12 @@ const mplay = require("./commands/mplay");
 const helpMusic = require("./commands/music/musicCommands");
 const disconnect = require("./commands/disconnect");
 
-app.set("port", process.env.PORT || 5000);
-
+var port = process.env.PORT || 5000;
+var host = "0.0.0.0";
 //For avoidong Heroku $PORT error
-app
-  .get("/", function (request, response) {
-    var result = "App is running";
-    response.send(result);
-  })
-  .listen(app.get("port"), function () {
-    console.log(
-      "App is running, server is listening on port ",
-      app.get("port")
-    );
-  });
+app.listen(port, host, function () {
+  console.log("App is running");
+});
 
 const client = new Discord.Client();
 const storyString = new Array();
