@@ -1,5 +1,5 @@
-var express = require("express");
-var app = express();
+// var express = require("express");
+// var app = express();
 
 const Discord = require("discord.js");
 const keepAlive = require("./extras/keepAlive");
@@ -34,12 +34,12 @@ const mplay = require("./commands/mplay");
 const helpMusic = require("./commands/music/musicCommands");
 const disconnect = require("./commands/disconnect");
 
-var port = process.env.PORT || 5000;
-var host = "0.0.0.0";
-//For avoidong Heroku $PORT error
-app.listen(port, host, function () {
-  console.log("App is running");
-});
+// var port = process.env.PORT || 5000;
+// var host = "0.0.0.0";
+// //For avoidong Heroku $PORT error
+// app.listen(port, host, function () {
+//   console.log("App is running");
+// });
 
 const client = new Discord.Client();
 const storyString = new Array();
@@ -58,8 +58,9 @@ client.once("disconnect", () => {
   console.log("Disconnect!");
 });
 
+// keepAlive();
+
 client.on("message", function (message) {
-  keepAlive();
   if (message.author.bot) return;
   if (message.mentions.members.first() !== undefined) {
     if (message.mentions.members.first().id === "761892006263390210") {
