@@ -1,4 +1,5 @@
 const Discord = require("discord.js");
+const keepAlive = require("./extras/keepAlive");
 const ping = require("./commands/ping");
 const shakal = require("./commands/shakal");
 const kikhaishe = require("./commands/kikhaishe");
@@ -48,6 +49,7 @@ client.once("disconnect", () => {
 });
 
 client.on("message", function (message) {
+  keepAlive();
   if (message.author.bot) return;
   if (message.mentions.members.first() !== undefined) {
     if (message.mentions.members.first().id === "761892006263390210") {
