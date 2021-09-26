@@ -35,13 +35,7 @@ const client = new Discord.Client();
 const storyString = new Array();
 const playerQueue = new Array();
 
-var server_port = process.env.PORT || 5000;
-var server_host = "0.0.0.0";
-server.listen(server_port, server_host, function () {
-  console.log(`port ${server_port}`);
-});
-
-client.login(process.env.BOT_TOKEN);
+client.login(process.env.BOT_TOKEN, process.env.PORT || 5000);
 const prefix = "*";
 
 client.once("ready", () => {
@@ -53,8 +47,6 @@ client.once("reconnecting", () => {
 client.once("disconnect", () => {
   console.log("Disconnect!");
 });
-
-client.listen(process.env.PORT || 5000);
 
 client.on("message", function (message) {
   keepAlive();
