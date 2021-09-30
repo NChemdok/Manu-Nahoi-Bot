@@ -22,11 +22,8 @@ const playlistp = async (message, serverQueue, queue) => {
   const userName = message.mentions.users.first() || message.author;
   const discordUserID = userName.id.toString().trim();
 
-  const playlistName = message.content
-    .slice(10)
-    .trim()
-    .toUpperCase()
-    .toString();
+  const playlistName = message.content.slice(3).trim().toUpperCase().toString();
+  console.log(playlistName);
 
   async function getTheSongDetails(songInfo) {
     song = {

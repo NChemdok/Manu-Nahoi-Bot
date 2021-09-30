@@ -179,7 +179,7 @@ client.on("message", function (message) {
     case "stop":
     case "q":
     case "remove":
-    case "playlistp":
+    case "pp":
     case "shuffle":
     case "pause":
     case "resume":
@@ -187,6 +187,7 @@ client.on("message", function (message) {
     case "allplaylist":
     case "deleteplaylist":
     case "skipto":
+    case "s":
       mplay(args, message, command);
       break;
     case "helpmusic":

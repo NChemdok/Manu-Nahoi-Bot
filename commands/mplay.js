@@ -11,6 +11,7 @@ const spotify = require("./music/spotify");
 const allPlaylist = require("./music/allPlaylist");
 const deletePlaylist = require("./music/deletePlaylist");
 const skipTo = require("./music/skipTo");
+const search = require("./music/search");
 
 const queue = new Map();
 
@@ -29,7 +30,7 @@ const mplay = (args, message, command) => {
     case "skipto":
       skipTo(message, serverQueue);
       break;
-    case "playlistp":
+    case "pp":
       playlistp(message, serverQueue, queue);
       break;
     case "shuffle":
@@ -43,6 +44,9 @@ const mplay = (args, message, command) => {
       break;
     case "resume":
       resume(message, serverQueue);
+      break;
+    case "s":
+      search(message);
       break;
     case "spotify":
       spotify(message, serverQueue);
