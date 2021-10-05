@@ -5,7 +5,6 @@ const generateRandomColor = require("../../extras/generateRandomColor");
 
 const Search = async (message) => {
   const searchKeyword = message.content.slice(2).trim();
-  var songDetailsList = [];
   var searchResults = "";
 
   async function getTheSongDetails(songInfo) {

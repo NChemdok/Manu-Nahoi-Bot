@@ -98,11 +98,16 @@ const playlistp = async (message, serverQueue, queue) => {
         if (!videos.length) {
           continue;
         }
-        const songInfo = await ytdl.getInfo(videos[0].url);
-        getTheSongDetails(songInfo);
-        serverQueue.songs.push(song);
-        if (serverQueue && serverQueue.songs.length == 1) {
-          play(message.guild, serverQueue.songs[0]);
+        try {
+          const songInfo = await ytdl.getInfo(videos[0].url);
+          getTheSongDetails(songInfo);
+          serverQueue.songs.push(song);
+          if (serverQueue && serverQueue.songs.length == 1) {
+            play(message.guild, serverQueue.songs[0]);
+          }
+        } catch (error) {
+          console.log(error);
+          continue;
         }
       }
     }
