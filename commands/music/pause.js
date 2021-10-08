@@ -4,12 +4,11 @@ const pause = async (message, serverQueue) => {
       "You have to be in a voice channel to skip the music!"
     );
   }
-
   if (!serverQueue) {
     return message.channel.send("Bot not playing currently");
   }
   serverQueue.connection.dispatcher.pause();
-  message.channel.send("Playback Paused :(");
+  message.channel.send("Playback Paused");
 };
 
 module.exports = pause;

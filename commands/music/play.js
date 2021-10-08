@@ -57,9 +57,15 @@ const play = async (args, message, serverQueue, queue) => {
       } else {
         const { videos } = await yts(serverQueue.songLinks[songs]);
         if (!videos.length) return message.channel.send("No songs were found!");
-        const songInfo = await ytdl.getInfo(videos[0].url);
-        getTheSongDetails(songInfo);
-        serverQueue.songs.push(song);
+        try {
+          const songInfo = await ytdl.getInfo(videos[0].url);
+          getTheSongDetails(songInfo);
+          serverQueue.songs.push(song);
+        } catch (error) {
+          return message.channel.send(
+            "Song is Age Restricted/Copyrighted Unable to queue, Try a different song !"
+          );
+        }
         if (serverQueue && serverQueue.songs.length == 1) {
           play(message.guild, serverQueue.songs[0]);
         }

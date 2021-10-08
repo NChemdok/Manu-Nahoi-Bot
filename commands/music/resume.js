@@ -10,7 +10,7 @@ const resume = async (message, serverQueue) => {
   }
 
   serverQueue.connection.dispatcher.resume();
-  message.channel.send("Playback Resumed :)");
+  message.channel.send("Playback Resumed");
 };
 
 module.exports = resume;
