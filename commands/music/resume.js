@@ -10,7 +10,9 @@ const resume = async (message, serverQueue) => {
   }
 
   serverQueue.connection.dispatcher.resume();
-  message.channel.send("Playback Resumed");
+  return message.channel.send("Playback Resumed").then((msg) => {
+    setTimeout(() => msg.delete({ timeout: 4000 }));
+  });
 };
 
 module.exports = resume;

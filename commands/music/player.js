@@ -9,9 +9,11 @@ const player = async (guild, song, message, queue) => {
   if (!song) {
     serverQueue.voiceChannel.leave();
     queue.delete(guild.id);
-    return message.channel.send(
-      "No more Songs in Queue, Leaving Voice Channel"
-    );
+    return message.channel
+      .send("No more Songs in Queue, Leaving Voice Channel")
+      .then((msg) => {
+        setTimeout(() => msg.delete({ timeout: 4000 }));
+      });
   }
   if (!serverQueue) {
     return;

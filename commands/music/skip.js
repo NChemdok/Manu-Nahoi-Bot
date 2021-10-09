@@ -20,7 +20,9 @@ const skip = async (message, serverQueue) => {
     });
     clearTimeout(serverQueue.playbackTimeoutID);
     serverQueue.connection.dispatcher.end();
-    return message.channel.send("Skipped");
+    return message.channel.send("Skipped").then((msg) => {
+      setTimeout(() => msg.delete({ timeout: 4000 }));
+    });
   }
 };
 

@@ -16,7 +16,11 @@ const spotify = async (message, serverQueue) => {
   );
 
   if (!playlistName || !playlistLink) {
-    return message.channel.send("No Playlist Name Or Playlist Link Entered");
+    return message.channel
+      .send("No Playlist Name Or Playlist Link Entered")
+      .then((msg) => {
+        setTimeout(() => msg.delete({ timeout: 4000 }));
+      });
   }
   var songsObject = { songs: [] };
 
@@ -31,12 +35,18 @@ const spotify = async (message, serverQueue) => {
     var songs = await getTracks(playlistLink);
   } catch {
     console.error();
-    return message.channel.send("Invalid Spotify Link !!!");
+    return message.channel.send("Invalid Spotify Link !!!").then((msg) => {
+      setTimeout(() => msg.delete({ timeout: 3000 }));
+    });
   }
 
-  message.channel.send(
-    `Adding Songs to ${playlistName} Playlist, This may take a while based on the number of songs in playlist`
-  );
+  message.channel
+    .send(
+      `Adding Songs to ${playlistName} Playlist, This may take a while based on the number of songs in playlist`
+    )
+    .then((msg) => {
+      setTimeout(() => msg.delete({ timeout: 1000 * 20 }));
+    });
   for (items in songs) {
     const songID = "https://open.spotify.com/track/" + songs[items].id;
     var songDetails = await getPreview(songID);

@@ -88,7 +88,9 @@ const playlistp = async (message, serverQueue, queue) => {
     for (song in serverQueue.songLinks) {
       if (serverQueue.songLinks.length == 0 || serverQueue.botVoiceState == 1) {
         serverQueue.songs = [];
-        return message.channel.send("Queuing Terminated");
+        return message.channel.send("Queuing Terminated").then((msg) => {
+          setTimeout(() => msg.delete({ timeout: 4000 }));
+        });
       }
       if (ytdl.validateURL(serverQueue.songLinks[song])) {
         const songInfo = await ytdl.getInfo(serverQueue.songLinks[song]);
@@ -150,9 +152,13 @@ const playlistp = async (message, serverQueue, queue) => {
   }
 
   if (serverQueue && serverQueue.songLinks.length >= 1) {
-    return message.channel.send(
-      "Bot Currently Queuing Please Try again after previous command is complete!"
-    );
+    return message.channel
+      .send(
+        "Bot Currently Queuing Please Try again after previous command is complete!"
+      )
+      .then((msg) => {
+        setTimeout(() => msg.delete({ timeout: 5000 }));
+      });
   }
   try {
     var songlinks = await fetchDataFromFirestore(playlistName);
@@ -160,7 +166,9 @@ const playlistp = async (message, serverQueue, queue) => {
     console.log(err);
   }
   if (!Array.isArray(songlinks)) {
-    return message.channel.send("Playlist Doesn't Exist !!!");
+    return message.channel.send("Playlist Doesn't Exist !!!").then((msg) => {
+      setTimeout(() => msg.delete({ timeout: 4000 }));
+    });
   }
   addSongsToTheQueue(songlinks);
 };
