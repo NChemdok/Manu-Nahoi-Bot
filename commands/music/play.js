@@ -60,14 +60,14 @@ const play = async (args, message, serverQueue, queue) => {
         try {
           const songInfo = await ytdl.getInfo(videos[0].url);
           getTheSongDetails(songInfo);
-          serverQueue.songs.push(song);
+          await serverQueue.songs.push(song);
         } catch (error) {
           return message.channel.send(
             "Song is Age Restricted/Copyrighted Unable to queue, Try a different song !"
           );
         }
         if (serverQueue && serverQueue.songs.length == 1) {
-          play(message.guild, serverQueue.songs[0]);
+          await play(message.guild, serverQueue.songs[0]);
         }
       }
       serverQueue.songLinks.shift();

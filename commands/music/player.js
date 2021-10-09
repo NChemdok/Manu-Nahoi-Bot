@@ -5,6 +5,7 @@ const generateRandomColor = require("../../extras/generateRandomColor");
 
 const player = async (guild, song, message, queue) => {
   const serverQueue = queue.get(message.guild.id);
+
   if (!song) {
     serverQueue.voiceChannel.leave();
     queue.delete(guild.id);
@@ -30,6 +31,15 @@ const player = async (guild, song, message, queue) => {
     .on("error", (error) => {
       console.error(error);
     });
+
+  serverQueue.connection.on("disconnect", () => {
+    clearTimeout(serverQueue.playbackTimeoutID);
+    serverQueue.songLinks = [];
+    serverQueue.songs = [];
+    queue.delete(guild.id);
+    return;
+  });
+
   dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
 
   function secondsToTime(songDurationInSeconds) {

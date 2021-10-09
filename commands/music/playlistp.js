@@ -23,7 +23,7 @@ const playlistp = async (message, serverQueue, queue) => {
   const discordUserID = userName.id.toString().trim();
 
   const playlistName = message.content.slice(3).trim().toUpperCase().toString();
-  console.log(playlistName);
+  // console.log(playlistName);
 
   async function getTheSongDetails(songInfo) {
     song = {
@@ -86,7 +86,8 @@ const playlistp = async (message, serverQueue, queue) => {
   async function ifBotPlaying(serverQueue, songlinks) {
     serverQueue.songLinks = songlinks;
     for (song in serverQueue.songLinks) {
-      if (serverQueue.songLinks.length == 0) {
+      if (serverQueue.songLinks.length == 0 || serverQueue.botVoiceState == 1) {
+        serverQueue.songs = [];
         return message.channel.send("Queuing Terminated");
       }
       if (ytdl.validateURL(serverQueue.songLinks[song])) {
@@ -101,12 +102,14 @@ const playlistp = async (message, serverQueue, queue) => {
         try {
           const songInfo = await ytdl.getInfo(videos[0].url);
           getTheSongDetails(songInfo);
-          serverQueue.songs.push(song);
+          await serverQueue.songs.push(song);
           if (serverQueue && serverQueue.songs.length == 1) {
-            play(message.guild, serverQueue.songs[0]);
+            await play(message.guild, serverQueue.songs[0]);
           }
         } catch (error) {
-          console.log(error);
+          message.channel.send(
+            `${song.title} is Age Restricted/Copyrighted Unable to queue, Try a different song !`
+          );
           continue;
         }
       }
@@ -120,11 +123,19 @@ const playlistp = async (message, serverQueue, queue) => {
   }
 
   async function addSongsToTheQueue(songlinks) {
-    message.channel.send("Queuing Songs...");
-    if (!serverQueue) {
-      serverQueue = await ifBotNotPlaying();
-    }
-    ifBotPlaying(serverQueue, songlinks);
+    message.channel
+      .send("Queuing Songs...")
+      .then(async (msg) => {
+        if (!serverQueue) {
+          serverQueue = await ifBotNotPlaying();
+        }
+        ifBotPlaying(serverQueue, songlinks);
+        setTimeout(() => msg.delete({ timeout: 5000 * songlinks.length }));
+      })
+      .catch(() => {
+        console.log("Error In AddSongsToQueueFUNC");
+      });
+    return;
   }
 
   if (!voiceChannel) {

@@ -7,6 +7,10 @@ const Search = async (message) => {
   const searchKeyword = message.content.slice(2).trim();
   var searchResults = "";
 
+  message.channel.send(`Searching : ${searchKeyword}`).then((msg) => {
+    setTimeout(() => msg.delete({ timeout: 1000 * 15 }));
+  });
+
   async function getTheSongDetails(songInfo) {
     song = {
       title: songInfo.videoDetails.title,
@@ -23,7 +27,6 @@ const Search = async (message) => {
 
   if (ytdl.validateURL(searchKeyword)) {
     const songInfo = await ytdl.getInfo(searchKeyword);
-    console.log(songInfo);
     getTheSongDetails(songInfo);
     return message.channel.send(song.title);
   } else {
