@@ -73,6 +73,7 @@ const play = async (args, message, serverQueue, queue) => {
           getTheSongDetails(songInfo);
           await serverQueue.songs.push(song);
         } catch (error) {
+          console.log(error);
           return message.channel
             .send(
               "Song is Age Restricted/Copyrighted Unable to queue, Try a different song !"
