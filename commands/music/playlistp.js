@@ -25,17 +25,8 @@ const playlistp = async (message, serverQueue, queue) => {
   const playlistName = message.content.slice(3).trim().toUpperCase().toString();
   // console.log(playlistName);
 
-  async function getTheSongDetails(songInfo) {
-    song = {
-      title: songInfo.videoDetails.title,
-      url: songInfo.videoDetails.video_url,
-      duration: songInfo.videoDetails.lengthSeconds,
-    };
-  }
-
-  async function play(guild, song) {
-    player(guild, song, message, queue);
-    return;
+  async function play(guild) {
+    player(guild, message, queue);
   }
 
   async function fetchDataFromFirestore(playlistName) {
@@ -85,43 +76,19 @@ const playlistp = async (message, serverQueue, queue) => {
 
   async function ifBotPlaying(serverQueue, songlinks) {
     serverQueue.songLinks = songlinks;
-    for (song in serverQueue.songLinks) {
-      if (serverQueue.songLinks.length == 0 || serverQueue.botVoiceState == 1) {
-        serverQueue.songs = [];
-        return message.channel.send("Queuing Terminated").then((msg) => {
-          setTimeout(() => msg.delete({ timeout: 4000 }));
-        });
-      }
-      if (ytdl.validateURL(serverQueue.songLinks[song])) {
-        const songInfo = await ytdl.getInfo(serverQueue.songLinks[song]);
-        getTheSongDetails(songInfo);
-        serverQueue.songs.push(song);
-      } else {
-        const { videos } = await yts(serverQueue.songLinks[song]);
-        if (!videos.length) {
-          continue;
-        }
-        try {
-          const songInfo = await ytdl.getInfo(videos[0].url);
-          getTheSongDetails(songInfo);
-          await serverQueue.songs.push(song);
-          if (serverQueue && serverQueue.songs.length == 1) {
-            await play(message.guild, serverQueue.songs[0]);
-          }
-        } catch (error) {
-          message.channel.send(
-            `${song.title} is Age Restricted/Copyrighted Unable to queue, Try a different song !`
-          );
-          continue;
-        }
+    for (songs in serverQueue.songLinks) {
+      serverQueue.songs.push(serverQueue.songLinks[songs]);
+      if (serverQueue && serverQueue.songs.length == 1) {
+        await play(message.guild);
       }
     }
+
     if (serverQueue) {
       message.channel.send(
         `${serverQueue.songLinks.length} Songs from ${playlistName} playlist has been added to queue!`
       );
-      return (serverQueue.songLinks = []);
     }
+    serverQueue.songLinks = [];
   }
 
   async function addSongsToTheQueue(songlinks) {
@@ -132,7 +99,7 @@ const playlistp = async (message, serverQueue, queue) => {
           serverQueue = await ifBotNotPlaying();
         }
         ifBotPlaying(serverQueue, songlinks);
-        setTimeout(() => msg.delete({ timeout: 5000 * songlinks.length }));
+        setTimeout(() => msg.delete({ timeout: 100 * songlinks.length }));
       })
       .catch(() => {
         console.log("Error In AddSongsToQueueFUNC");
@@ -151,15 +118,6 @@ const playlistp = async (message, serverQueue, queue) => {
     );
   }
 
-  if (serverQueue && serverQueue.songLinks.length >= 1) {
-    return message.channel
-      .send(
-        "Bot Currently Queuing Please Try again after previous command is complete!"
-      )
-      .then((msg) => {
-        setTimeout(() => msg.delete({ timeout: 5000 }));
-      });
-  }
   try {
     var songlinks = await fetchDataFromFirestore(playlistName);
   } catch (err) {

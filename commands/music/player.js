@@ -3,14 +3,11 @@ const yts = require("yt-search");
 const Discord = require("discord.js");
 const generateRandomColor = require("../../extras/generateRandomColor");
 
-const player = async (guild, song, message, queue) => {
+const player = async (guild, message, queue) => {
   const serverQueue = queue.get(message.guild.id);
-
-  if (!song) {
+  if (serverQueue.songs.length == 0) {
     serverQueue.voiceChannel.leave();
     queue.delete(guild.id);
-    serverQueue.songLinks = [];
-    serverQueue.songs = [];
     return message.channel
       .send("No more Songs in Queue, Leaving Voice Channel")
       .then((msg) => {
@@ -21,16 +18,58 @@ const player = async (guild, song, message, queue) => {
     return;
   }
 
+  async function getTheSongDetails(songInfo) {
+    song = {
+      title: songInfo.videoDetails.title,
+      url: songInfo.videoDetails.video_url,
+      duration: songInfo.videoDetails.lengthSeconds,
+    };
+    return song;
+  }
+
+  async function getSongUrl(songs) {
+    if (ytdl.validateURL(songs)) {
+      try {
+        const songInfo = await ytdl.getInfo(songs);
+        const song = getTheSongDetails(songInfo);
+        return song;
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      const { videos } = await yts(songs);
+      if (!videos.length) {
+        return;
+      }
+      try {
+        const songInfo = await ytdl.getInfo(videos[0].url);
+        const song = getTheSongDetails(songInfo);
+        return song;
+      } catch (error) {
+        message.channel.send(
+          `${songs} is Age Restricted/Copyrighted Unable to queue`
+        );
+      }
+    }
+  }
+
+  const currentSong = await getSongUrl(serverQueue.songs[0]);
+
   const dispatcher = serverQueue.connection.play(
-    ytdl(song.url, {
+    ytdl(currentSong.url, {
       quality: "highestaudio",
       highWaterMark: 1 << 25,
     })
   );
+  message.channel
+    .send(`${currentSong.title} has been added to queue!`)
+    .then((msg) => {
+      setTimeout(() => msg.delete({ timeout: 5000 }));
+    });
   dispatcher
     .on("finish", function () {
       serverQueue.songs.shift();
-      player(guild, serverQueue.songs[0], message, queue);
+      player(guild, message, queue);
     })
     .on("error", (error) => {
       console.error(error);
@@ -38,7 +77,6 @@ const player = async (guild, song, message, queue) => {
 
   serverQueue.connection.on("disconnect", () => {
     clearTimeout(serverQueue.playbackTimeoutID);
-    serverQueue.songLinks = [];
     serverQueue.songs = [];
     queue.delete(guild.id);
     return;
@@ -69,14 +107,17 @@ const player = async (guild, song, message, queue) => {
     .setColor(color)
     .setTitle(`Now playing : 🎧`)
     .setThumbnail("https://s8.gifyu.com/images/logoc770e3d062e8bb72.gif")
-    .addFields({ name: song.title, value: secondsToTime(song.duration) });
+    .addFields({
+      name: currentSong.title,
+      value: secondsToTime(currentSong.duration),
+    });
 
   try {
     var messageId = await serverQueue.textChannel.send(resultResponse);
     serverQueue.currentMusicPlayingMessageId = messageId.id;
     serverQueue.playbackTimeoutID = setTimeout(
       () => messageId.delete(),
-      song.duration * 1000
+      currentSong.duration * 1000
     );
   } catch (err) {
     console.log(err);

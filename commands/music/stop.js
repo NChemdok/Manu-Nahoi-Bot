@@ -19,8 +19,6 @@ const stop = async (message, serverQueue) => {
   clearTimeout(serverQueue.playbackTimeoutID);
   serverQueue.songs = [];
   serverQueue.connection.dispatcher.end();
-  serverQueue.songLinks = [];
-  return;
 };
 
 module.exports = stop;

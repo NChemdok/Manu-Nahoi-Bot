@@ -25,20 +25,14 @@ const queue = async (message, serverQueue) => {
   async function getSongsQueueInfo(serverQueue) {
     if (serverQueue && serverQueue.songs.length) {
       for (var i = 0; i <= serverQueue.songs.length - 1; i++) {
-        var songTitle = serverQueue.songs[i].title;
-        var songDurationInSeconds = serverQueue.songs[i].duration;
-        var formatedDuration = secondsToTime(songDurationInSeconds);
+        var songTitle = serverQueue.songs[i].toUpperCase();
         var songNumber = i + 1;
-        var songInfoColored =
-          "[" +
-          songNumber +
-          '] "' +
-          songTitle.substring(0, 26) +
-          "...  | " +
-          formatedDuration +
-          '"';
+        var songInfoColored = `[${songNumber}] ${songTitle.substring(
+          0,
+          26
+        )}...`;
         if (i > 19) {
-          const songsRemaining = serverQueue.songs.length - 20;
+          const songsRemaining = serverQueue.songs.length - 25;
           currentSongQueue = `${currentSongQueue} \n And ${songsRemaining} More Songs in Queue`;
           break;
         } else {
