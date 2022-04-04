@@ -23,7 +23,7 @@ const queue = async (message, serverQueue) => {
   }
 
   async function getSongsQueueInfo(serverQueue) {
-    if (serverQueue && serverQueue.songs.length) {
+    if (serverQueue && serverQueue.songs.length > 0) {
       for (var i = 0; i <= serverQueue.songs.length - 1; i++) {
         var songTitle = serverQueue.songs[i].toUpperCase();
         var songNumber = i + 1;
