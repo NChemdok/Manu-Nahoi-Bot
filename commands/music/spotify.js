@@ -49,10 +49,16 @@ const spotify = async (message, serverQueue) => {
     });
   for (items in songs) {
     const songID = "https://open.spotify.com/track/" + songs[items].id;
-    var songDetails = await getPreview(songID);
-    var songToAddInArray = `${songDetails.title} ${songDetails.artist}`;
-    var formatedSongData = songToAddInArray.trim().toString();
-    songsObject.songs.push(formatedSongData);
+    try {
+      var songDetails = await getPreview(songID);
+      var songToAddInArray = `${songDetails.title} ${songDetails.artist}`;
+      var formatedSongData = songToAddInArray.trim().toString();
+      songsObject.songs.push(formatedSongData);
+    } catch (error) {
+      console.log(error);
+      continue;
+    }
+
     // console.log(`${songDetails.title} ${songDetails.artist}`);
   }
   //console.log(songsObject);
