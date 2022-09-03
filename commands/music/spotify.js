@@ -1,8 +1,13 @@
-const { getData, getPreview, getTracks } = require("spotify-url-info");
+const fetch = require("isomorphic-unfetch");
+const { getData, getPreview, getTracks, getDetails } =
+  require("spotify-url-info")(fetch);
 
 const firebase = require("firebase-admin");
 
 const spotify = async (message, serverQueue) => {
+  // getDetails("https://open.spotify.com/track/5nTtCOCds6I0PHMNtqelas").then(
+  //   (data) => console.log(data)
+  // );
   const songInfoFromUser = message.content.slice(8).trim();
   const userName = message.author;
   const discordUserID = userName.id.toString().trim();
@@ -50,7 +55,11 @@ const spotify = async (message, serverQueue) => {
   for (items in songs) {
     const songID = "https://open.spotify.com/track/" + songs[items].id;
     try {
-      var songDetails = await getPreview(songID);
+      var songDetails = await getPreview(songID, {
+        headers: {
+          "user-agent": "googlebot",
+        },
+      });
       var songToAddInArray = `${songDetails.title} ${songDetails.artist}`;
       var formatedSongData = songToAddInArray.trim().toString();
       songsObject.songs.push(formatedSongData);

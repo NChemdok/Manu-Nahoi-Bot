@@ -5,7 +5,7 @@
   "main": "index.js",
   "engines": {
     "node": "14.x",
-    "npm": "6.x"
+    "npm": "8.x"
   },
   "scripts": {
     "start": "node index.js",
@@ -23,16 +23,17 @@
     "express": "^4.17.1",
     "extract-sptf-playlist": "^0.2.0",
     "figlet": "^1.5.0",
-    "firebase-admin": "^9.8.0",
+    "firebase-admin": "^11.0.1",
+    "isomorphic-unfetch": "^3.1.0",
     "make-me-laugh": "^2.2.1",
     "node-fetch": "^2.6.1",
     "node-pre-gyp": "^0.17.0",
     "nodemon": "^2.0.4",
     "one-liner-joke": "^1.2.0",
     "opusscript": "0.0.7",
-    "spotify-url-info": "^2.2.0",
+    "spotify-url-info": "^3.1.7",
     "yt-search": "^2.10.1",
-    "ytdl-core": "^4.11.0"
+    "ytdl-core": "^4.11.1"
   },
   "devDependencies": {
     "env-cmd": "^10.1.0"

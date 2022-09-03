@@ -1,5 +1,3 @@
-const ytdl = require("ytdl-core");
-const yts = require("yt-search");
 const player = require("./player");
 
 const play = async (args, message, serverQueue, queue) => {
@@ -13,14 +11,6 @@ const play = async (args, message, serverQueue, queue) => {
   }
 
   const voiceChannel = message.member.voice.channel;
-
-  async function getTheSongDetails(songInfo) {
-    song = {
-      title: songInfo.videoDetails.title,
-      url: songInfo.videoDetails.video_url,
-      duration: songInfo.videoDetails.lengthSeconds,
-    };
-  }
 
   async function play(guild) {
     await player(guild, message, queue);
@@ -60,8 +50,18 @@ const play = async (args, message, serverQueue, queue) => {
     for (songs in serverQueue.songLinks) {
       serverQueue.songs.push(serverQueue.songLinks[songs]);
       if (serverQueue && serverQueue.songs.length == 1) {
-        await play(message.guild);
+        try {
+          await play(message.guild);
+          return;
+        } catch (error) {
+          console.log(error);
+        }
       }
+      return message.channel
+        .send(`${songLinks} has been added to queue!`)
+        .then((msg) => {
+          setTimeout(() => msg.delete({ timeout: 5000 }));
+        });
     }
     serverQueue.songLinks = [];
   }

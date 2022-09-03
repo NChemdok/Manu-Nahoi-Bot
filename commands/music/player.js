@@ -46,6 +46,7 @@ const player = async (guild, message, queue) => {
         const song = getTheSongDetails(songInfo);
         return song;
       } catch (error) {
+        console.log(error);
         message.channel.send(
           `${songs} is Age Restricted/Copyrighted Unable to queue`
         );
@@ -54,7 +55,6 @@ const player = async (guild, message, queue) => {
   }
 
   const currentSong = await getSongUrl(serverQueue.songs[0]);
-
   const dispatcher = serverQueue.connection.play(
     ytdl(currentSong.url, {
       quality: "highestaudio",
