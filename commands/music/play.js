@@ -49,20 +49,19 @@ const play = async (args, message, serverQueue, queue) => {
     serverQueue.songLinks = songlinks;
     for (songs in serverQueue.songLinks) {
       serverQueue.songs.push(serverQueue.songLinks[songs]);
-      if (serverQueue && serverQueue.songs.length == 1) {
-        try {
-          await play(message.guild);
-          return;
-        } catch (error) {
-          console.log(error);
-        }
-      }
-      return message.channel
-        .send(`${songLinks} has been added to queue!`)
-        .then((msg) => {
-          setTimeout(() => msg.delete({ timeout: 5000 }));
-        });
     }
+    if (serverQueue && serverQueue.songs.length == 1) {
+      try {
+        await play(message.guild);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    message.channel
+      .send(`${songlinks} has been added to queue!`)
+      .then((msg) => {
+        setTimeout(() => msg.delete({ timeout: 5000 }));
+      });
     serverQueue.songLinks = [];
   }
 
